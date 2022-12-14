@@ -1,46 +1,30 @@
 package com.pine.lib.app
 
-import android.support.multidex.MultiDexApplication
-import com.pine.lib.debug.e
+import android.app.Application
 
 
-open class PineApplication : MultiDexApplication {
+object PineApplication {
+    lateinit var application: Application
 
-    constructor() {
-        baseApp = this
-    }
+    fun onCreate(application: Application) {
+        this.application = application
 
-    override fun onCreate() {
-        super.onCreate()
 
         if (C.isDebug) {
-            onDebugInit();
+            onDebugInit()
         } else {
-            onLiveInit();
+            onLiveInit()
         }
     }
 
-    open fun onDebugInit() {
-        C.isDebug = true;
-        C.keepScreenOn = true;
+    fun onDebugInit() {
+        C.isDebug = true
+        C.keepScreenOn = true
     }
 
-    open fun onLiveInit() {
-        C.isDebug = false;
-        C.keepScreenOn = false;
-    }
-
-
-    companion object {
-        var baseApp: PineApplication? = null;
-
-        fun i(): PineApplication {
-            if (baseApp == null) {
-                e("严重错误，Application 没有被初始化！");
-            }
-            return baseApp!!
-        }
-
+    fun onLiveInit() {
+        C.isDebug = false
+        C.keepScreenOn = false
     }
 
 }

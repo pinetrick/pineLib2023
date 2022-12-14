@@ -1,46 +1,44 @@
 package com.pine.lib.app
 
-import android.os.Bundle
+import android.app.Activity
 import android.view.KeyEvent
-import androidx.appcompat.app.AppCompatActivity
 import com.pine.lib.addone.MyTimer
 import com.pine.lib.app.C.keepScreenOn
+import com.pine.lib.debug.e
 import com.pine.lib.hardware.keepScreenOn
 import com.pine.lib.view.toast.toast
+import java.lang.ref.WeakReference
 
-
-fun a(): PineActivity {
-    return PineActivity.activity!!
+fun a(): Activity {
+    PineActivity.activity.get()?.let {
+        return it
+    }
+    e("activity没有被注入")
+    throw IllegalArgumentException("activity没有被注入")
 }
 
-open class PineActivity : AppCompatActivity() {
+object PineActivity {
+
     //是否开启双击退出
-    open var enableDoubleReturnExit = false
+    var enableDoubleReturnExit = false
+    lateinit var activity: WeakReference<Activity>
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        activity = this
-        super.onCreate(savedInstanceState)
+    fun onCreate(activity: Activity) {
+        PineActivity.activity = WeakReference(activity)
 
         keepScreenOn(keepScreenOn)
-
     }
 
-    override fun onResume() {
-        activity = this
-        super.onResume()
-    }
-
-    //返回键按下事件，可被重写
-    open fun onReturnKeyDown(): Boolean {
-        return false
+    fun onResume(activity: Activity) {
+        this.activity = WeakReference(activity)
     }
 
     private var mBackKeyPressed = false
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+
+    //调用这个函数可以实现返回两次退出
+    fun onKeyDown(activity: Activity, keyCode: Int, event: KeyEvent?) {
         when (keyCode) {
             KeyEvent.KEYCODE_BACK -> {
-
                 if (enableDoubleReturnExit) {
                     if (!mBackKeyPressed) {
                         toast("Press one more times for exit")
@@ -48,27 +46,17 @@ open class PineActivity : AppCompatActivity() {
                         MyTimer().setInterval(2000).setOnTimerListener {
                             mBackKeyPressed = false
                         }.start(1)
-                        return false
+                        return
                     } else {//退出程序
-                        this.finish()
+                        activity.finish()
                         //System.exit(0)
                     }
                 }
-
-                if (onReturnKeyDown())
-                    return false
             }
             else -> {
             }
         }
-
-
-        return super.onKeyDown(keyCode, event)
     }
 
-
-    companion object {
-        var activity: PineActivity? = null
-    }
 
 }
