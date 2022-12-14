@@ -1,11 +1,7 @@
 package com.pine.lib.app
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.pine.lib.addone.MyTimer
 import com.pine.lib.app.C.keepScreenOn
@@ -23,21 +19,21 @@ open class PineActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        PineActivity.activity = this;
+        activity = this
         super.onCreate(savedInstanceState)
 
-        keepScreenOn(keepScreenOn);
+        keepScreenOn(keepScreenOn)
 
     }
 
     override fun onResume() {
-        PineActivity.activity = this;
+        activity = this
         super.onResume()
     }
 
     //返回键按下事件，可被重写
     open fun onReturnKeyDown(): Boolean {
-        return false;
+        return false
     }
 
     private var mBackKeyPressed = false
@@ -52,7 +48,7 @@ open class PineActivity : AppCompatActivity() {
                         MyTimer().setInterval(2000).setOnTimerListener {
                             mBackKeyPressed = false
                         }.start(1)
-                        return false;
+                        return false
                     } else {//退出程序
                         this.finish()
                         //System.exit(0)
@@ -60,7 +56,7 @@ open class PineActivity : AppCompatActivity() {
                 }
 
                 if (onReturnKeyDown())
-                    return false;
+                    return false
             }
             else -> {
             }
@@ -71,9 +67,8 @@ open class PineActivity : AppCompatActivity() {
     }
 
 
-
     companion object {
-        var activity: PineActivity? = null;
+        var activity: PineActivity? = null
     }
 
 }
