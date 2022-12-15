@@ -6,24 +6,37 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pine.lib.R
-import com.pine.lib.app.c
 
 
 class DbAdapter : RecyclerView.Adapter<DbViewHolder>() {
 
+    var onDbChoosed: ((choosedName: String) -> Unit)? = null
+    var databases: List<String> = emptyList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DbViewHolder {
         val view: View =
-            LayoutInflater.from(c()).inflate(R.layout.database_choose_db_adapter, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.database_choose_db_adapter, parent, false)
         return DbViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return 20
+        return databases.size
     }
 
 
     override fun onBindViewHolder(holder: DbViewHolder, position: Int) {
-        holder.dbName!!.text = "xxx"
+        holder.dbName!!.text = databases[position]
+        holder.dbName!!.setOnClickListener {
+            onDbChoosed?.let {
+                onDbChoosed!!(databases[position])
+            }
+        }
+    }
+
+    fun setDatabase(databases: List<String>) {
+        this.databases = databases
+        notifyDataSetChanged()
 
     }
 }

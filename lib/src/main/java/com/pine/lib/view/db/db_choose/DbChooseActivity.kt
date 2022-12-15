@@ -2,6 +2,7 @@ package com.pine.lib.view.db.db_choose
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pine.lib.R
 import com.pine.lib.addone.db.Db
@@ -14,6 +15,7 @@ class DbChooseActivity : Activity() {
     lateinit var tablesView: RecyclerView
 
     var dbAdapter = DbAdapter()
+    var tableAdapter = TableAdapter()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +27,13 @@ class DbChooseActivity : Activity() {
         tablesView = findViewById(R.id.tables)
 
         dbsView.adapter = dbAdapter
+        dbsView.layoutManager = LinearLayoutManager(this)
 
+        tablesView.adapter = tableAdapter
+        tablesView.layoutManager = LinearLayoutManager(this)
 
         addFakeData()
-        refresh()
+        refreshDatabase()
     }
 
 
@@ -37,7 +42,13 @@ class DbChooseActivity : Activity() {
         super.onResume()
     }
 
-    fun refresh() {
+    private fun refreshDatabase() {
+
+        val databases = Db.getAllDb()
+        dbAdapter.setDatabase(databases)
+        dbAdapter.onDbChoosed = ::onDbChoose
+
+
 //        tableLayout.removeAllViewsInLayout()
 //
 //        val records = Db("TestDb1").model("Users").select()
@@ -56,6 +67,11 @@ class DbChooseActivity : Activity() {
 //        }
 
 
+    }
+
+    fun onDbChoose(dbName: String) {
+        val tables = Db(dbName).tables()
+        tableAdapter.setTable(tables)
     }
 
     fun addFakeData() {
