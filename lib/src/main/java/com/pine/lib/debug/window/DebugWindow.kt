@@ -77,6 +77,7 @@ class DebugWindow constructor(context: Context) : OnItemClickListener {
 
             checkDb!!.setOnClickListener {
                 intent(DatabaseActivity::class)
+                dismiss()
             }
 
             goSetting!!.setOnClickListener {

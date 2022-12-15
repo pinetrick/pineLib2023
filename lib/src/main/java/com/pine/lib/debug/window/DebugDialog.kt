@@ -23,7 +23,7 @@ class DebugDialog : AlertDialog {
         if (a() != null) {
             activityName = a().localClassName
         }
-        mainMassage!!.text = "Rain调试器附在:$activityName"
+        mainMassage!!.text = "$activityName"
     }
 
     val view: DebugDialog

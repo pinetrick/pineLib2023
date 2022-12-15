@@ -13,6 +13,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import com.pine.lib.R
+import com.pine.lib.addone.MyTimer
 import com.pine.lib.app.a
 import com.pine.lib.app.c
 import com.pine.lib.view.message_box.MessageBox
@@ -26,6 +27,8 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
     private lateinit var params: WindowManager.LayoutParams
     private lateinit var wm: WindowManager
     private lateinit var baseView: View
+
+    var isMsgBoxShowing = false
 
     init {
         createFloatView()
@@ -66,8 +69,8 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
 		 */
 
         // 设置悬浮窗的长得宽
-        params.width = 120
-        params.height = 120
+        params.width = 100
+        params.height = 100
         val h: Int = 44
         params.x = 0
         params.y = -h
@@ -83,17 +86,31 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
     }
 
     fun onCreateWindowFailed() {
+        if (isMsgBoxShowing) return
+
         MessageBox().setOnBtnClickListener {
             when (it) {
-                3 -> a().startActivityForResult(
-                    Intent(
-                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + c().packageName)
-                    ), 0
-                )
-                else -> Unit
+                3 -> {
+                    a().startActivityForResult(
+                        Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + c().packageName)
+                        ), 0
+                    )
+
+                    MyTimer().setInterval(1000).setOnTimerListener {
+                        createFloatView()
+                        if (isAdded) {
+                            isMsgBoxShowing = false
+                            it.stop()
+                        }
+                    }.start(10)
+                }
+                else -> isMsgBoxShowing = false
             }
+
         }.show("调试器无法运行，请检查是否有创建悬浮窗权限！", "不再提醒", "忽略", "去开启")
+        isMsgBoxShowing = true
     }
 
     companion object {
