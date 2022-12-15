@@ -5,7 +5,7 @@ import android.view.KeyEvent
 import com.pine.lib.addone.MyTimer
 import com.pine.lib.app.C.keepScreenOn
 import com.pine.lib.debug.e
-import com.pine.lib.debug.window.Dbg
+import com.pine.lib.debug.window.DbgButton
 import com.pine.lib.hardware.keepScreenOn
 import com.pine.lib.view.toast.toast
 import java.lang.ref.WeakReference
@@ -26,7 +26,7 @@ object PineActivity {
 
     fun onCreate(activity: Activity) {
         PineActivity.activity = WeakReference(activity)
-        Dbg.i()
+        DbgButton.i()
 
         keepScreenOn(keepScreenOn)
 

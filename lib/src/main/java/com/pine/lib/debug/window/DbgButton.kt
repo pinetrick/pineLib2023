@@ -18,11 +18,9 @@ import com.pine.lib.app.c
 import com.pine.lib.view.message_box.MessageBox
 
 
-class Dbg : View.OnTouchListener, View.OnClickListener {
+class DbgButton : View.OnTouchListener, View.OnClickListener {
 
-    //private val debugFloatWindow = DebugWindow()
-    private val availableBtns: ArrayList<IDebugBtns> = ArrayList()
-
+    val availableBtns: ArrayList<IDebugBtns> = ArrayList()
 
     private var isAdded = false // 是否已增加悬浮窗
     private lateinit var params: WindowManager.LayoutParams
@@ -99,9 +97,10 @@ class Dbg : View.OnTouchListener, View.OnClickListener {
     }
 
     companion object {
-        private val dbg = Dbg()
-        fun i(): Dbg {
-            return dbg
+        private val dbgButton = DbgButton()
+
+        fun i(): DbgButton {
+            return dbgButton
         }
     }
 
@@ -132,7 +131,7 @@ class Dbg : View.OnTouchListener, View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-        //TODO("Not yet implemented")
+        DebugWindow.i(a()).show()
     }
 
 }
