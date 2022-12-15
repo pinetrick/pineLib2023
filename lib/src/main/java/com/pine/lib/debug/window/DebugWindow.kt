@@ -14,7 +14,7 @@ import com.pine.lib.app.a
 import com.pine.lib.app.c
 import com.pine.lib.app.intent
 import com.pine.lib.debug.e
-import com.pine.lib.view.db.DatabaseActivity
+import com.pine.lib.view.db.db_choose.DbChooseActivity
 import com.pine.lib.view.message_box.MessageBox
 import kotlin.system.exitProcess
 
@@ -77,7 +77,7 @@ class DebugWindow constructor(context: Context) : OnItemClickListener {
             }
 
             checkDb!!.setOnClickListener {
-                intent(DatabaseActivity::class)
+                intent(DbChooseActivity::class)
                 dismiss()
             }
 

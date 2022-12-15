@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.pine.lib.app.intent
-import com.pine.lib.view.db.DatabaseActivity
+import com.pine.lib.view.db.db_choose.DbChooseActivity
 import com.pine.lib_proj.databinding.FragmentFirstBinding
 
 /**
@@ -35,7 +35,7 @@ class FirstFragment : Fragment() {
 
         binding.buttonFirst.setOnClickListener {
             //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-            intent(DatabaseActivity::class)
+            intent(DbChooseActivity::class)
         }
     }
 

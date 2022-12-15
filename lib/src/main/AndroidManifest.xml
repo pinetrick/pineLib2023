@@ -17,7 +17,7 @@
     <application>
 
         <activity
-            android:name="com.pine.lib.view.db.DatabaseActivity"
+            android:name="com.pine.lib.view.db.db_choose.DbChooseActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
