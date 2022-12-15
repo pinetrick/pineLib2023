@@ -1,11 +1,12 @@
 package com.pine.lib_proj
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
+import com.pine.lib.app.intent
+import com.pine.lib.view.db.DatabaseActivity
 import com.pine.lib_proj.databinding.FragmentFirstBinding
 
 /**
@@ -33,7 +34,8 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            intent(DatabaseActivity::class)
         }
     }
 
