@@ -16,6 +16,7 @@ import com.pine.lib.app.intent
 import com.pine.lib.debug.e
 import com.pine.lib.view.db.DatabaseActivity
 import com.pine.lib.view.message_box.MessageBox
+import kotlin.system.exitProcess
 
 
 class DebugWindow constructor(context: Context) : OnItemClickListener {
@@ -88,15 +89,17 @@ class DebugWindow constructor(context: Context) : OnItemClickListener {
                         DataCleanManager.cleanSharedPreference(c())
                         DataCleanManager.cleanFiles(c())
                         DataCleanManager.cleanExternalCache(c())
-                        System.exit(0)
+                        exitProcess(0)
                     } else if (id == 2) {
                         val intent = Intent()
                         intent.action = Intent.ACTION_DELETE
                         intent.data = Uri
                             .parse("package:" + c().packageName)
                         a().startActivity(intent)
+                    } else if (id == 3) {
+                        exitProcess(0)
                     }
-                }.show("应用将退出！", "清除数据", "卸载应用", "取消")
+                }.show("应用将退出！", "清除数据", "卸载应用", "自杀", "取消")
             }
         }
     }
