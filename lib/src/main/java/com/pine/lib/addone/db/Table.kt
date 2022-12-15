@@ -1,35 +1,46 @@
 package com.pine.lib.addone.db
 
 import android.database.Cursor
+import androidx.core.database.getStringOrNull
 
 class Table constructor(val db: Db, val tableName: String) {
 
-
-    val headers: ArrayList<Pair<String, String>> by lazy {
+    val headers: ArrayList<TableHeader> by lazy {
         if (!db.db.isOpen) {
             ArrayList()
         } else {
             val c: Cursor = db.db.rawQuery("pragma table_info ('$tableName');", null)
 
-            val r: ArrayList<Pair<String, String>> = ArrayList<Pair<String, String>>()
+            val r: ArrayList<TableHeader> = ArrayList<TableHeader>()
 
             if (c.moveToFirst()) {
                 while (!c.isAfterLast) {
-                    r.add(Pair(c.getString(1), c.getString(2)))
+                    val tableHeader = TableHeader()
+                    tableHeader.cid = c.getInt(0)
+                    tableHeader.name = c.getString(1)
+                    tableHeader.type = c.getString(2)
+                    tableHeader.notnull = c.getInt(3)
+                    tableHeader.dflt_value = c.getStringOrNull(4)
+                    tableHeader.pk = c.getInt(5)
+
+                    r.add(tableHeader)
                     c.moveToNext()
                 }
             }
             r
         }
-
     }
 
-    fun select(): List<HashMap<String, Any>> {
+    fun newRecord(): Record {
+        return Record(db, this)
+    }
+
+    fun select(): List<Record> {
         if (!db.db.isOpen) return emptyList()
 
         val c: Cursor = db.db.rawQuery("SELECT * FROM $tableName", null)
 
-        val r: ArrayList<HashMap<String, Any>> = ArrayList<HashMap<String, Any>>()
+        val r: ArrayList<Record> = ArrayList<Record>()
 
         if (c.moveToFirst()) {
             while (!c.isAfterLast) {
@@ -40,33 +51,36 @@ class Table constructor(val db: Db, val tableName: String) {
         return r
     }
 
-    private fun getRecordFromCursor(c: Cursor): HashMap<String, Any>  {
+    private fun getRecordFromCursor(c: Cursor): Record  {
 
-        var values: HashMap<String, Any> = HashMap<String, Any>()
+        val record = Record(db, this)
+        record.isNewRecord = false
 
         headers.forEachIndexed { index, it ->
-            val v = when (it.second.lowercase()) {
+            val v = when (it.type.lowercase()) {
                 "text" -> c.getString(index)
                 "integer" -> c.getInt(index)
                 else -> "Unknown"
             }
-            values[it.first] = v
+            record.values[it.name] = v
         }
 
-        return values
+        return record
     }
 
-    fun create(callback: (ArrayList<Pair<String, String>>) -> ArrayList<Pair<String, String>>) {
+    fun create(callback: (ArrayList<TableHeader>) -> ArrayList<TableHeader>) {
         val sb = StringBuilder()
         sb.append("create table if not exists ")
         sb.append(tableName)
         sb.append(" (")
 
-
-        val list = callback(ArrayList<Pair<String, String>>())
+        val list = callback(ArrayList<TableHeader>())
         list.forEach {
-            sb.append(it.first)
-            sb.append(" " + it.second)
+            sb.append(it.name + " ")
+            sb.append(it.type + " ")
+            if (it.pk == 1) {
+                sb.append(" PRIMARY KEY ")
+            }
             if (list.last() != it) sb.append(", ")
         }
 
@@ -75,8 +89,4 @@ class Table constructor(val db: Db, val tableName: String) {
         db.db.execSQL(sb.toString())
 
     }
-}
-
-class HeaderBuilder {
-
 }
