@@ -21,7 +21,7 @@ class DebugDialog : AlertDialog {
         mainMassage = findViewById<TextView>(R.id.mainMassage)
         var activityName = ""
         if (a() != null) {
-            activityName = a().localClassName
+            activityName = a().javaClass.simpleName
         }
         mainMassage!!.text = "$activityName"
     }
