@@ -40,7 +40,7 @@ class Table constructor(val db: Db, val tableName: String) {
 
         val c: Cursor = db.db.rawQuery("SELECT * FROM $tableName", null)
 
-        val r: ArrayList<Record> = ArrayList<Record>()
+        val r: ArrayList<Record> = ArrayList()
 
         if (c.moveToFirst()) {
             while (!c.isAfterLast) {

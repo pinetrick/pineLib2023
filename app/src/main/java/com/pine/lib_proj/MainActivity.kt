@@ -1,34 +1,22 @@
 package com.pine.lib_proj
 
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
-import com.pine.lib.app.PineActivity
+import com.pine.lib.app.PineAppCompatActivity
 import com.pine.lib_proj.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : PineAppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    override fun onResume() {
-        PineActivity.onResume(this)
-        super.onResume()
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        PineActivity.onKeyDown(this, keyCode, event)
-        return super.onKeyDown(keyCode, event)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        PineActivity.onCreate(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -1,11 +1,20 @@
 package com.pine.lib.app
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.pine.lib.debug.e
 
+fun a(): Activity {
+    PineActivity.activity.get()?.let {
+        return it
+    }
+    e("activity没有被注入")
+    throw IllegalArgumentException("activity没有被注入")
+}
 
 fun app(): Application {
     return PineApplication.application

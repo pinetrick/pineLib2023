@@ -10,14 +10,6 @@ import com.pine.lib.hardware.keepScreenOn
 import com.pine.lib.view.toast.toast
 import java.lang.ref.WeakReference
 
-fun a(): Activity {
-    PineActivity.activity.get()?.let {
-        return it
-    }
-    e("activity没有被注入")
-    throw IllegalArgumentException("activity没有被注入")
-}
-
 object PineActivity {
 
     //是否开启双击退出

@@ -2,29 +2,36 @@ package com.pine.lib.view.db.db_choose
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pine.lib.R
 import com.pine.lib.addone.db.Db
 import com.pine.lib.addone.db.TableHeader
 import com.pine.lib.app.PineActivity
+import com.pine.lib.app.PineAppCompatActivity
+import com.pine.lib.app.intent
+import com.pine.lib.view.db.show_table_data.ShowTableDataActivity
 
-class DbChooseActivity : Activity() {
+class DbChooseActivity : PineAppCompatActivity() {
 
     lateinit var dbsView: RecyclerView
     lateinit var tablesView: RecyclerView
+    lateinit var closeButton: ImageView
+
 
     var dbAdapter = DbAdapter()
     var tableAdapter = TableAdapter()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        PineActivity.onCreate(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.database_choose_activity)
 
         dbsView = findViewById(R.id.dbs)
         tablesView = findViewById(R.id.tables)
+        closeButton = findViewById(R.id.database_close_button)
+
 
         dbsView.adapter = dbAdapter
         dbsView.layoutManager = LinearLayoutManager(this)
@@ -32,15 +39,11 @@ class DbChooseActivity : Activity() {
         tablesView.adapter = tableAdapter
         tablesView.layoutManager = LinearLayoutManager(this)
 
+        closeButton.setOnClickListener { this.finish() }
         addFakeData()
         refreshDatabase()
     }
 
-
-    override fun onResume() {
-        PineActivity.onResume(this)
-        super.onResume()
-    }
 
     private fun refreshDatabase() {
 
@@ -48,6 +51,7 @@ class DbChooseActivity : Activity() {
         dbAdapter.setDatabase(databases)
         dbAdapter.onDbChoosed = ::onDbChoose
 
+        tableAdapter.onTableChoosed = ::onTableChoose
 
 //        tableLayout.removeAllViewsInLayout()
 //
@@ -71,7 +75,15 @@ class DbChooseActivity : Activity() {
 
     fun onDbChoose(dbName: String) {
         val tables = Db(dbName).tables()
-        tableAdapter.setTable(tables)
+        tableAdapter.setTable(dbName, tables)
+    }
+
+    fun onTableChoose(dbName: String, tableName: String) {
+
+        ShowTableDataActivity.dbName = dbName
+        ShowTableDataActivity.tableName = tableName
+
+        intent(ShowTableDataActivity::class)
     }
 
     fun addFakeData() {

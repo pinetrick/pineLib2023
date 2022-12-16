@@ -27,7 +27,7 @@ class DbAdapter : RecyclerView.Adapter<DbViewHolder>() {
 
     override fun onBindViewHolder(holder: DbViewHolder, position: Int) {
         holder.dbName!!.text = databases[position]
-        holder.dbName!!.setOnClickListener {
+        holder.baseView!!.setOnClickListener {
             onDbChoosed?.let {
                 onDbChoosed!!(databases[position])
             }

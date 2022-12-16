@@ -9,7 +9,10 @@ import com.pine.lib.R
 
 class TableAdapter : RecyclerView.Adapter<TableViewHolder>() {
 
+    var onTableChoosed: ((dbName: String, tableName: String) -> Unit)? = null
+    var dbName: String = ""
     var tables: List<String> = emptyList()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolder {
         val view: View =
@@ -25,10 +28,15 @@ class TableAdapter : RecyclerView.Adapter<TableViewHolder>() {
 
     override fun onBindViewHolder(holder: TableViewHolder, position: Int) {
         holder.tableName!!.text = tables[position]
-
+        holder.baseView!!.setOnClickListener {
+            onTableChoosed?.let {
+                onTableChoosed!!(dbName, tables[position])
+            }
+        }
     }
 
-    fun setTable(tables: List<String>) {
+    fun setTable(dbName: String, tables: List<String>) {
+        this.dbName = dbName
         this.tables = tables
         notifyDataSetChanged()
 

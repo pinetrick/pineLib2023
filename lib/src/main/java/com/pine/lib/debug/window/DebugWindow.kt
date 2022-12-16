@@ -19,8 +19,7 @@ import com.pine.lib.view.message_box.MessageBox
 import kotlin.system.exitProcess
 
 
-class DebugWindow constructor(context: Context) : OnItemClickListener {
-    private val context: Context
+class DebugWindow : OnItemClickListener {
     private var gridView: GridView? = null
     private var dialog: DebugDialog? = null
     private var retBtn: Button? = null
@@ -29,9 +28,6 @@ class DebugWindow constructor(context: Context) : OnItemClickListener {
     private var checkDb: Button? = null
     private var isShowing: Boolean = false
 
-    init {
-        this.context = context
-    }
 
     // 清理前端窗口
     fun dismiss() {
@@ -49,12 +45,12 @@ class DebugWindow constructor(context: Context) : OnItemClickListener {
      * @param buttons
      */
     fun show() {
-        if (context == null) {
+        if (a() == null) {
             e("消息框无法显示 - 上下文失效")
             return
         }
         if (!isShowing) {
-            dialog = DebugDialog(context, R.style.dialog)
+            dialog = DebugDialog(a(), R.style.dialog)
             dialog!!.setCanceledOnTouchOutside(true) // 设置点击Dialog外部任意区域关闭Dialog
             dialog!!.show()
             dialog!!.setOnCancelListener {
@@ -112,9 +108,9 @@ class DebugWindow constructor(context: Context) : OnItemClickListener {
     companion object {
         private var debugWindow: DebugWindow? = null
 
-        fun i(context: Context): DebugWindow {
+        fun i(): DebugWindow {
             if (debugWindow == null) {
-                debugWindow = DebugWindow(context)
+                debugWindow = DebugWindow()
             }
             return debugWindow!!
         }

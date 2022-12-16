@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="40dp"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tableName"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TextView>
-</RelativeLayout>
+        android:layout_weight="100"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/tableName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:maxLines="1"
+            android:text="@string/lib_name"></TextView>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+</LinearLayout>

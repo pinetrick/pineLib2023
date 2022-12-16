@@ -148,7 +148,7 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-        DebugWindow.i(a()).show()
+        DebugWindow.i().show()
     }
 
 }
