@@ -27,14 +27,14 @@
             <Spinner
                 android:id="@+id/database_db_list"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <Spinner
                 android:id="@+id/database_table_list"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/database_refresh"
@@ -50,14 +50,18 @@
             android:layout_height="0dp"
             android:layout_weight="7">
 
-            <TableLayout
-                android:id="@+id/database_table"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" >
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableLayout
+                    android:id="@+id/database_table"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
 
-            </TableLayout>
-
+                </TableLayout>
+            </HorizontalScrollView>
         </ScrollView>
 
     </LinearLayout>

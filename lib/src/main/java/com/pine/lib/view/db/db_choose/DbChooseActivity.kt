@@ -87,7 +87,7 @@ class DbChooseActivity : PineAppCompatActivity() {
             row = TableRow(a())
             records.headers.forEach { header ->
                 val editText = TableEditText(a())
-                editText.setText(record.values[header.name].toString())
+                editText.init(record, header.name)
                 row.addView(editText)
             }
             table.addView(row)
@@ -98,28 +98,36 @@ class DbChooseActivity : PineAppCompatActivity() {
 
     fun addFakeData() {
 
-        Db("TestDb2")
         val table = Db("TestDb1").model("Users")
         table.create {
             it.apply {
                 add(TableHeader("id", "INTEGER", pk = 1))
-                add(TableHeader("xx", "TEXT"))
+                add(TableHeader("colume1", "TEXT"))
+                add(TableHeader("colume2", "TEXT"))
+                add(TableHeader("colume3", "TEXT"))
+                add(TableHeader("colume4", "TEXT"))
+                add(TableHeader("colume5", "TEXT"))
+                add(TableHeader("colume6", "TEXT"))
+                add(TableHeader("colume7", "TEXT"))
+                add(TableHeader("colume8", "TEXT"))
+                add(TableHeader("colume9", "TEXT"))
             }
         }
 
-        val table1 = Db("TestDb1").model("Users5")
-        table1.create {
-            it.apply {
-                add(TableHeader("id", "INTEGER", pk = 1))
-                add(TableHeader("xx", "TEXT"))
-            }
+        (0..20).forEach{
+            table.newRecord()
+                .put("colume1", "Unknown Value")
+                .put("colume2", "Unknown Value")
+                .put("colume3", "Unknown Value")
+                .put("colume4", "Unknown Value")
+                .put("colume5", "Unknown Value")
+                .put("colume6", "Unknown Value")
+                .put("colume7", "Unknown Value")
+                .put("colume8", "Unknown Value")
+                .put("colume9", "Unknown Value")
+                .save()
         }
 
-        table1.newRecord().put("xx", "Unknown Value").save()
-        table1.newRecord().put("xx", "Unknown Value1").save()
 
-        val db = Db.getAllDb()
-        // val header = table.headers
-        val records = table.select()
     }
 }

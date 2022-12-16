@@ -13,14 +13,18 @@ class Record constructor(val db: Db, val table: Table) {
             sql = getInsertSql()
         } else {
             val pk = table.headers.first { it.pk == 1 }
-            if (pk == null) {
-                sql = getInsertSql()
+            sql = if (pk == null) {
+                getInsertSql()
             } else {
-
+                getUpdateSql(pk)
             }
 
         }
         db.db.execSQL(sql)
+    }
+
+    private fun getUpdateSql(pk: TableHeader): String {
+        return ""
     }
 
 
@@ -29,14 +33,15 @@ class Record constructor(val db: Db, val table: Table) {
         sb.append("INSERT INTO ${table.tableName} (")
 
         values.keys.forEach {
-            sb.append("'$it'")
-            if (values.keys.last() != it) sb.append(", ")
+            sb.append("'$it', ")
         }
+
+        sb.setLength(sb.length - 2)
         sb.append(") VALUES (")
         values.values.forEach {
-            sb.append("'$it'")
-            if (values.values.last() != it) sb.append(", ")
+            sb.append("'$it', ")
         }
+        sb.setLength(sb.length - 2)
         sb.append(");")
 
         return sb.toString()
