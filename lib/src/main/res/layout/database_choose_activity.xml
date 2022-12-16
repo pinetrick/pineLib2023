@@ -14,45 +14,51 @@
             android:layout_height="50dp"
             android:background="@color/lightblue"
             android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="30"
-                android:text="@string/database_db_list"
-                android:layout_height="match_parent"/>
+
 
             <ImageView
                 android:id="@+id/database_close_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
-                android:src="@drawable/close"
-                app:srcCompat="@drawable/close" />
+                android:src="@drawable/ret"
+                app:srcCompat="@drawable/ret" />
 
+            <Spinner
+                android:id="@+id/database_db_list"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
 
+            <Spinner
+                android:id="@+id/database_table_list"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/database_refresh"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:src="@drawable/refresh"
+                app:srcCompat="@drawable/refresh" />
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="10">
+            android:layout_height="0dp"
+            android:layout_weight="7">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dbs"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
+            <TableLayout
+                android:id="@+id/database_table"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
 
-            </androidx.recyclerview.widget.RecyclerView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tables"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="7">
+            </TableLayout>
 
-            </androidx.recyclerview.widget.RecyclerView>
+        </ScrollView>
 
-        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

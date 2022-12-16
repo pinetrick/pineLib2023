@@ -1,44 +1,36 @@
 package com.pine.lib.view.db.db_choose
 
-import android.view.LayoutInflater
+import android.content.Context
 import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.pine.lib.R
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 
 
-class TableAdapter : RecyclerView.Adapter<TableViewHolder>() {
+class TableAdapter(context: Context, resource: Int) : ArrayAdapter<String>(context, resource),
+    AdapterView.OnItemSelectedListener {
 
-    var onTableChoosed: ((dbName: String, tableName: String) -> Unit)? = null
+    var onTableChoosed: ((dbName: String, tableName: String?) -> Unit)? = null
     var dbName: String = ""
     var tables: List<String> = emptyList()
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolder {
-        val view: View =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.database_choose_table_adapter, parent, false)
-        return TableViewHolder(view)
+    fun setTables(dbName:String, tables: List<String>) {
+        this.dbName = dbName
+        this.tables = tables
+        clear()
+        addAll(tables)
+        notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return tables.size
-    }
-
-
-    override fun onBindViewHolder(holder: TableViewHolder, position: Int) {
-        holder.tableName!!.text = tables[position]
-        holder.baseView!!.setOnClickListener {
-            onTableChoosed?.let {
-                onTableChoosed!!(dbName, tables[position])
-            }
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+        onTableChoosed?.let {
+            onTableChoosed!!(dbName, tables[position])
         }
     }
 
-    fun setTable(dbName: String, tables: List<String>) {
-        this.dbName = dbName
-        this.tables = tables
-        notifyDataSetChanged()
-
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        onTableChoosed?.let {
+            onTableChoosed!!(dbName, null)
+        }
     }
 }

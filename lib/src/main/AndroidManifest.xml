@@ -22,9 +22,5 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
 
-        <activity
-            android:name="com.pine.lib.view.db.show_table_data.ShowTableDataActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 </manifest>

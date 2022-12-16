@@ -1,7 +1,5 @@
 package com.pine.lib.addone.db
 
-import android.database.Cursor
-
 class Record constructor(val db: Db, val table: Table) {
 
     var isNewRecord = true

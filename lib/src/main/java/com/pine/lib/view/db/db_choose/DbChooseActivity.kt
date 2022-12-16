@@ -1,89 +1,99 @@
 package com.pine.lib.view.db.db_choose
 
-import android.app.Activity
 import android.os.Bundle
-import android.widget.ImageView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.*
 import com.pine.lib.R
 import com.pine.lib.addone.db.Db
 import com.pine.lib.addone.db.TableHeader
-import com.pine.lib.app.PineActivity
 import com.pine.lib.app.PineAppCompatActivity
-import com.pine.lib.app.intent
-import com.pine.lib.view.db.show_table_data.ShowTableDataActivity
+import com.pine.lib.app.a
+
 
 class DbChooseActivity : PineAppCompatActivity() {
 
-    lateinit var dbsView: RecyclerView
-    lateinit var tablesView: RecyclerView
+    lateinit var table: TableLayout
+
     lateinit var closeButton: ImageView
+    lateinit var refreshButton: ImageView
 
+    lateinit var dbList: Spinner
+    lateinit var tableList: Spinner
 
-    var dbAdapter = DbAdapter()
-    var tableAdapter = TableAdapter()
+    lateinit var dbAdapter: DbAdapter
+    lateinit var tableAdapter: TableAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.database_choose_activity)
 
-        dbsView = findViewById(R.id.dbs)
-        tablesView = findViewById(R.id.tables)
         closeButton = findViewById(R.id.database_close_button)
+        refreshButton = findViewById(R.id.database_refresh)
+        dbList = findViewById(R.id.database_db_list)
+        tableList = findViewById(R.id.database_table_list)
+        table = findViewById(R.id.database_table)
 
+        dbAdapter = DbAdapter(this, android.R.layout.simple_spinner_item)
+        dbList.adapter = dbAdapter
+        dbAdapter.onDbChoosed = ::onDbChoose
+        dbList.onItemSelectedListener = dbAdapter
 
-        dbsView.adapter = dbAdapter
-        dbsView.layoutManager = LinearLayoutManager(this)
+        tableAdapter = TableAdapter(this, android.R.layout.simple_spinner_item)
+        tableList.adapter = tableAdapter
+        tableAdapter.onTableChoosed = ::onTableChoose
+        tableList.onItemSelectedListener = tableAdapter
 
-        tablesView.adapter = tableAdapter
-        tablesView.layoutManager = LinearLayoutManager(this)
 
         closeButton.setOnClickListener { this.finish() }
+        refreshButton.setOnClickListener { this.refreshDatabase() }
         addFakeData()
         refreshDatabase()
     }
 
 
     private fun refreshDatabase() {
-
         val databases = Db.getAllDb()
         dbAdapter.setDatabase(databases)
-        dbAdapter.onDbChoosed = ::onDbChoose
-
-        tableAdapter.onTableChoosed = ::onTableChoose
-
-//        tableLayout.removeAllViewsInLayout()
-//
-//        val records = Db("TestDb1").model("Users").select()
-//
-//        records.forEach {
-//            val tableRow = TableRow(this)
-//
-//            val editText = EditText(this)
-//            editText.setText(it.values.values.first().toString())
-//
-//            tableRow.addView(editText)
-//
-//
-//            tableLayout.addView(tableRow)
-//
-//        }
-
 
     }
 
-    fun onDbChoose(dbName: String) {
+    private fun onDbChoose(dbName: String?) {
+        if (dbName == null) return
+
         val tables = Db(dbName).tables()
-        tableAdapter.setTable(dbName, tables)
+        tableAdapter.setTables(dbName, tables)
     }
 
-    fun onTableChoose(dbName: String, tableName: String) {
+    private fun onTableChoose(dbName: String, tableName: String?) {
+        if (tableName == null) return
 
-        ShowTableDataActivity.dbName = dbName
-        ShowTableDataActivity.tableName = tableName
+        refreshTable(dbName, tableName)
+    }
 
-        intent(ShowTableDataActivity::class)
+    private fun refreshTable(dbName: String, tableName: String) {
+        table.removeAllViewsInLayout()
+        val records = Db(dbName).model(tableName).select()
+
+        var row = TableRow(a())
+        records.headers.forEach {
+            val textView = TextView(a())
+            textView.text = it.name
+            row.addView(textView)
+
+        }
+        table.addView(row)
+
+        records.records.forEach { record ->
+            row = TableRow(a())
+            records.headers.forEach { header ->
+                val editText = TableEditText(a())
+                editText.setText(record.values[header.name].toString())
+                row.addView(editText)
+            }
+            table.addView(row)
+        }
+
+
     }
 
     fun addFakeData() {

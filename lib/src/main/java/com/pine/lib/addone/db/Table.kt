@@ -35,38 +35,25 @@ class Table constructor(val db: Db, val tableName: String) {
         return Record(db, this)
     }
 
-    fun select(): List<Record> {
-        if (!db.db.isOpen) return emptyList()
+    fun select(): Records {
+        if (!db.db.isOpen) return Records()
 
         val c: Cursor = db.db.rawQuery("SELECT * FROM $tableName", null)
 
-        val r: ArrayList<Record> = ArrayList()
+        val records = Records()
 
         if (c.moveToFirst()) {
             while (!c.isAfterLast) {
-                r.add(getRecordFromCursor(c))
+                if (records.dbName.isEmpty()) {
+                    records.initHeadersBaseARecord(db, this, c)
+                }
+                records.anylizeLine(c)
                 c.moveToNext()
             }
         }
-        return r
+        return records
     }
 
-    private fun getRecordFromCursor(c: Cursor): Record  {
-
-        val record = Record(db, this)
-        record.isNewRecord = false
-
-        headers.forEachIndexed { index, it ->
-            val v = when (it.type.lowercase()) {
-                "text" -> c.getString(index)
-                "integer" -> c.getInt(index)
-                else -> "Unknown"
-            }
-            record.values[it.name] = v
-        }
-
-        return record
-    }
 
     fun create(callback: (ArrayList<TableHeader>) -> ArrayList<TableHeader>) {
         val sb = StringBuilder()
