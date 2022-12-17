@@ -1,8 +1,8 @@
 package com.pine.lib_proj
 
-import com.pine.lib.app.PineApplication
+import android.app.Application
 
-class MyApplication : PineApplication() {
+class MyApplication : Application() {
 
 
 }

@@ -1,6 +1,6 @@
 package com.pine.lib.debug.window
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -13,6 +13,7 @@ import com.pine.lib.addone.DataCleanManager
 import com.pine.lib.app.a
 import com.pine.lib.app.c
 import com.pine.lib.app.intent
+import com.pine.lib.app.isActivityInjected
 import com.pine.lib.debug.e
 import com.pine.lib.view.db.db_choose.DbChooseActivity
 import com.pine.lib.view.message_box.MessageBox
@@ -40,12 +41,9 @@ class DebugWindow : OnItemClickListener {
 
     /**
      * 通过这里显示提示框
-     *
-     * @param message
-     * @param buttons
      */
     fun show() {
-        if (a() == null) {
+        if (!isActivityInjected()) {
             e("消息框无法显示 - 上下文失效")
             return
         }
@@ -106,6 +104,7 @@ class DebugWindow : OnItemClickListener {
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         private var debugWindow: DebugWindow? = null
 
         fun i(): DebugWindow {

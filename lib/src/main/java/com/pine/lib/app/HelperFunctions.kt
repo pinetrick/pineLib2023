@@ -10,11 +10,26 @@ import androidx.core.content.ContextCompat
 import com.pine.lib.debug.e
 
 fun a(): Activity {
-    StaticPineActivity.activity.get()?.let {
-        return it
+    try {
+        StaticPineActivity.activity.get()?.let {
+            return it
+        }
+    } catch (e: Exception) {
+        e("activity没有被注入")
     }
-    e("activity没有被注入")
+
     throw IllegalArgumentException("activity没有被注入")
+}
+
+fun isActivityInjected(): Boolean {
+    try {
+        StaticPineActivity.activity.get()?.let {
+            return true
+        }
+    } catch (e: Exception) {
+
+    }
+    return false
 }
 
 fun app(): Application {
@@ -25,7 +40,7 @@ fun c(): Context {
     return app().applicationContext
 }
 
-fun stringResources(id: Int): String{
+fun stringResources(id: Int): String {
     return c().getString(id)
 }
 

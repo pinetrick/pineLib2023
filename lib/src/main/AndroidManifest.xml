@@ -15,6 +15,11 @@
 
 
     <application>
+        <provider
+            android:name="com.pine.lib.provider.background_task.BackgroundTaskProvider"
+            android:authorities="${applicationId}.PineDebugInit"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity
             android:name="com.pine.lib.view.db.db_choose.DbChooseActivity"
