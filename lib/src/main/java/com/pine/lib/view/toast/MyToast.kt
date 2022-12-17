@@ -5,10 +5,19 @@ import com.pine.lib.app.app
 import com.pine.lib.app.stringResources
 
 
-fun toast(id: Int){
-    Toast.makeText(app(), stringResources(id), Toast.LENGTH_LONG).show()
+fun toast(id: Int) {
+    try {
+        Toast.makeText(app(), stringResources(id), Toast.LENGTH_LONG).show()
+    } catch (_: Exception) {
+
+    }
 }
 
-fun toast(s: Any){
-    Toast.makeText(app(), s.toString(), Toast.LENGTH_LONG).show()
+fun toast(s: Any) {
+    try {
+        Toast.makeText(app(), s.toString(), Toast.LENGTH_LONG).show()
+    } catch (_: Exception) {
+
+    }
+
 }

@@ -43,7 +43,7 @@ class RequestHandler(private val mContext: Context) {
             // Output stream that we send the response to
             output = PrintStream(socket.getOutputStream())
             if (route == null || route.isEmpty()) {
-                route = "index.html"
+                route = "index"
             }
             val bytes = responseData.getResponse(route)
 
@@ -82,8 +82,10 @@ class RequestHandler(private val mContext: Context) {
             "application/javascript"
         } else if (fileName.endsWith(".css")) {
             "text/css"
-        } else {
+        } else if (fileName.endsWith(".zip")) {
             "application/octet-stream"
+        } else {
+            "text/html"
         }
     }
 

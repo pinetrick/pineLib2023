@@ -50,10 +50,13 @@ class ClientServer(port: Int = 8080) : Runnable {
             }
         } catch (e: SocketException) {
             // The server was stopped; ignore.
+            e("SocketException")
+            e.printStackTrace()
         } catch (e: IOException) {
             e("Web server error.")
         } catch (ignore: Exception) {
             e("Exception.")
+            ignore.printStackTrace()
         }
     }
 }
