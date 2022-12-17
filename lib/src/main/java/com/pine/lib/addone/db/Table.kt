@@ -27,6 +27,7 @@ class Table constructor(val db: Db, val tableName: String) {
                     c.moveToNext()
                 }
             }
+            c.close()
             r
         }
     }
@@ -51,6 +52,7 @@ class Table constructor(val db: Db, val tableName: String) {
                 c.moveToNext()
             }
         }
+        c.close()
         return records
     }
 

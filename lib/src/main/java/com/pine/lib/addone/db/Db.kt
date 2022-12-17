@@ -8,17 +8,9 @@ import com.pine.lib.debug.e
 import com.pine.lib.view.toast.toast
 
 
-class Db {
-    var dbName: String
+class Db(var dbName: String) {
     var lastSql: String = ""
-    var db: SQLiteDatabase
-
-    constructor(dbName: String) {
-        this.dbName = dbName
-        db = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
-
-    }
-
+    var db: SQLiteDatabase = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
 
     fun model(tableName: String): Table {
         return Table(this, tableName)
@@ -37,9 +29,12 @@ class Db {
                 c.moveToNext()
             }
         }
+        c.close()
+
         return r.reversed()
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun rawQuery(sql: String, selectionArgs: Array<String>? = null): Cursor {
         logSql(sql, selectionArgs as Array<Any?>?)
         return db.rawQuery(sql, selectionArgs)
