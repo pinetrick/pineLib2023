@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.pine.lib.R
 import com.pine.lib.addone.db.Record
 
-class TableEditText : AppCompatEditText {
+open class TableEditText : AppCompatEditText {
 
     var record: Record? = null
     var key: String = ""
@@ -22,7 +22,7 @@ class TableEditText : AppCompatEditText {
 
     }
 
-    fun init(record: Record, key: String){
+    open fun init(record: Record, key: String){
         this.record = record
         this.key = key
         this.value = record.values[key].toString()

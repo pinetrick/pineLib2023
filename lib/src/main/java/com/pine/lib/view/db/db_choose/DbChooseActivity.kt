@@ -58,6 +58,14 @@ class DbChooseActivity : PineAppCompatActivity() {
         val databases = Db.getAllDb()
         dbAdapter.setDatabase(databases)
 
+        //选中第一个数据库
+        val selectId = databases.firstOrNull {
+            it !in arrayOf("")
+        }
+        selectId?.let {
+            dbList.setSelection(databases.indexOf(it))
+        }
+
 
     }
 
@@ -66,6 +74,14 @@ class DbChooseActivity : PineAppCompatActivity() {
 
         val tables = Db(dbName).tables()
         tableAdapter.setTables(dbName, tables)
+
+        //选中第一个table
+        val selectId = tables.firstOrNull {
+            it !in arrayOf("room_master_table", "sqlite_sequence")
+        }
+        selectId?.let {
+            tableList.setSelection(tables.indexOf(it))
+        }
     }
 
     private fun onTableChoose(dbName: String, tableName: String?) {
@@ -80,8 +96,8 @@ class DbChooseActivity : PineAppCompatActivity() {
 
         var row = TableRow(a())
         records.headers.forEach {
-            val textView = TextView(a())
-            textView.text = it.name
+            val textView = TableHeaderTextView(a())
+            textView.init(it.name)
             row.addView(textView)
 
         }
@@ -101,8 +117,8 @@ class DbChooseActivity : PineAppCompatActivity() {
     }
 
     fun addFakeData() {
-        val db = Db("TestDb1")
-        val table = db.model("Users")
+        val db = Db("TestDb2")
+        val table = db.model("Users1")
         table.create {
             it.apply {
                 add(TableHeader("id", "INTEGER", pk = 1))

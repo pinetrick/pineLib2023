@@ -1,6 +1,7 @@
 package com.pine.lib.debug.window
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
@@ -14,9 +15,12 @@ import android.view.WindowManager
 import android.widget.Button
 import com.pine.lib.R
 import com.pine.lib.addone.MyTimer
+import com.pine.lib.addone.sharepreference.spGet
+import com.pine.lib.addone.sharepreference.spSet
 import com.pine.lib.app.a
 import com.pine.lib.app.c
 import com.pine.lib.view.message_box.MessageBox
+import com.pine.lib.view.toast.toast
 
 
 class DbgButton : View.OnTouchListener, View.OnClickListener {
@@ -34,6 +38,7 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
         createFloatView()
     }
 
+    @Suppress("DEPRECATION")
     fun createFloatView() {
         val mInflater = c().getSystemService(
             Context.LAYOUT_INFLATER_SERVICE
@@ -71,9 +76,8 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
         // 设置悬浮窗的长得宽
         params.width = 100
         params.height = 100
-        val h: Int = 44
-        params.x = 0
-        params.y = -h
+        params.x = spGet("floatwindowX", 0)
+        params.y = spGet("floatwindowY", 0)
         // 设置悬浮窗的Touch监听
         debugBtn.setOnTouchListener(this)
         debugBtn.setOnClickListener(this)
@@ -87,24 +91,34 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
 
     fun onCreateWindowFailed() {
         if (isMsgBoxShowing) return
+        if (spGet("floatWindowNeverShow", 0) == 1) return
 
         MessageBox().setOnBtnClickListener {
             when (it) {
+                1 -> {
+                    spSet("floatWindowNeverShow", 1)
+                }
                 3 -> {
-                    a().startActivityForResult(
-                        Intent(
-                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + c().packageName)
-                        ), 0
-                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        a().startActivityForResult(
+                            Intent(
+                                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + c().packageName)
+                            ), 0
+                        )
 
-                    MyTimer().setInterval(1000).setOnTimerListener {
-                        createFloatView()
-                        if (isAdded) {
-                            isMsgBoxShowing = false
-                            it.stop()
-                        }
-                    }.start(10)
+
+                        MyTimer().setInterval(1000).setOnTimerListener {
+                            createFloatView()
+                            if (isAdded) {
+                                isMsgBoxShowing = false
+                                it.stop()
+                            }
+                        }.start(10)
+                    }
+                    else {
+                        toast("Please redirect settings to open this function")
+                    }
                 }
                 else -> isMsgBoxShowing = false
             }
@@ -114,6 +128,7 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         private val dbgButton = DbgButton()
 
         fun i(): DbgButton {
@@ -125,7 +140,6 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
     var lastY: Int = 0
     var paramX = 0
     var paramY: Int = 0
-
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when (event?.action) {
@@ -142,8 +156,11 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
                 params.y = paramY + dy
                 // 更新悬浮窗位置
                 wm.updateViewLayout(baseView, params)
+                spSet("floatwindowX", params.x)
+                spSet("floatwindowY", params.y)
             }
         }
+        
         return false
     }
 
