@@ -13,6 +13,8 @@ class DbChooseActivity : PineAppCompatActivity() {
 
     lateinit var table: TableLayout
 
+    lateinit var sqlEditor: EditText
+
     lateinit var closeButton: ImageView
     lateinit var refreshButton: ImageView
 
@@ -32,6 +34,7 @@ class DbChooseActivity : PineAppCompatActivity() {
         dbList = findViewById(R.id.database_db_list)
         tableList = findViewById(R.id.database_table_list)
         table = findViewById(R.id.database_table)
+        sqlEditor = findViewById(R.id.database_sql_editor)
 
         dbAdapter = DbAdapter(this, android.R.layout.simple_spinner_item)
         dbList.adapter = dbAdapter
@@ -46,7 +49,7 @@ class DbChooseActivity : PineAppCompatActivity() {
 
         closeButton.setOnClickListener { this.finish() }
         refreshButton.setOnClickListener { this.refreshDatabase() }
-        addFakeData()
+        //addFakeData()
         refreshDatabase()
     }
 
@@ -54,6 +57,7 @@ class DbChooseActivity : PineAppCompatActivity() {
     private fun refreshDatabase() {
         val databases = Db.getAllDb()
         dbAdapter.setDatabase(databases)
+
 
     }
 
@@ -97,8 +101,8 @@ class DbChooseActivity : PineAppCompatActivity() {
     }
 
     fun addFakeData() {
-
-        val table = Db("TestDb1").model("Users")
+        val db = Db("TestDb1")
+        val table = db.model("Users")
         table.create {
             it.apply {
                 add(TableHeader("id", "INTEGER", pk = 1))
@@ -114,20 +118,22 @@ class DbChooseActivity : PineAppCompatActivity() {
             }
         }
 
-        (0..20).forEach{
-            table.newRecord()
-                .put("colume1", "Unknown Value")
-                .put("colume2", "Unknown Value")
-                .put("colume3", "Unknown Value")
-                .put("colume4", "Unknown Value")
-                .put("colume5", "Unknown Value")
-                .put("colume6", "Unknown Value")
-                .put("colume7", "Unknown Value")
-                .put("colume8", "Unknown Value")
-                .put("colume9", "Unknown Value")
-                .save()
-        }
+        var record = table.newRecord()
+            .put("colume1", "Unknown Value")
+            .put("colume2", "Unknown Value")
+            .put("colume3", "Unknown Value")
+            .put("colume4", "Unknown Value")
+            .put("colume5", "Unknown Value")
+            .put("colume6", "Unknown Value")
+            .put("colume7", "Unknown Value")
+            .put("colume8", "Unknown Value")
+            .put("colume9", "Unknown Value")
+            .save()
 
+        record = table.select().records[0]
+        record.put("colume1", "xx")
+        record.save()
 
+        sqlEditor.setText(db.lastSql)
     }
 }

@@ -4,11 +4,13 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.pine.lib.app.c
+import com.pine.lib.debug.e
+import com.pine.lib.view.toast.toast
 
 
 class Db {
     var dbName: String
-
+    var lastSql: String = ""
     var db: SQLiteDatabase
 
     constructor(dbName: String) {
@@ -16,6 +18,7 @@ class Db {
         db = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
 
     }
+
 
     fun model(tableName: String): Table {
         return Table(this, tableName)
@@ -34,15 +37,33 @@ class Db {
                 c.moveToNext()
             }
         }
-        return r
+        return r.reversed()
     }
 
+    fun rawQuery(sql: String, selectionArgs: Array<String>? = null): Cursor {
+        logSql(sql, selectionArgs as Array<Any?>?)
+        return db.rawQuery(sql, selectionArgs)
+    }
+
+    fun execSQL(sql: String, bindArgs: Array<Any?>) {
+        logSql(sql, bindArgs)
+        return db.execSQL(sql, bindArgs)
+    }
+
+    private fun logSql(sql: String, bindArgs: Array<Any?>? = null) {
+        lastSql = sql
+        bindArgs?.forEach {
+            lastSql = lastSql.replaceFirst("?", "'$it'")
+        }
+        toast(lastSql)
+        e(lastSql)
+    }
 
     companion object {
         fun getAllDb(): List<String> {
             return c().databaseList().toList().filter {
                 !it.contains("journal")
-            }
+            }.reversed()
         }
     }
 }

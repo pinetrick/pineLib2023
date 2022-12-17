@@ -9,7 +9,7 @@ class Table constructor(val db: Db, val tableName: String) {
         if (!db.db.isOpen) {
             ArrayList()
         } else {
-            val c: Cursor = db.db.rawQuery("pragma table_info ('$tableName');", null)
+            val c: Cursor = db.rawQuery("pragma table_info ('$tableName');")
 
             val r: ArrayList<TableHeader> = ArrayList<TableHeader>()
 
@@ -38,7 +38,7 @@ class Table constructor(val db: Db, val tableName: String) {
     fun select(): Records {
         if (!db.db.isOpen) return Records()
 
-        val c: Cursor = db.db.rawQuery("SELECT * FROM $tableName", null)
+        val c: Cursor = db.rawQuery("SELECT * FROM $tableName")
 
         val records = Records()
 

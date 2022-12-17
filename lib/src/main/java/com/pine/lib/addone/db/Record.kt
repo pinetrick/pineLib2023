@@ -3,48 +3,70 @@ package com.pine.lib.addone.db
 class Record constructor(val db: Db, val table: Table) {
 
     var isNewRecord = true
-    var values: HashMap<String, Any> = HashMap()
+    var values: MutableMap<String, Any> = mutableMapOf()
 
-    fun save() {
-        if (!db.db.isOpen) return
+    fun save(): Record {
+        if (!db.db.isOpen) return this
 
-        var sql = ""
-        if (isNewRecord) {
-            sql = getInsertSql()
+        val sql: Pair<String, Array<Any?>> = if (isNewRecord) {
+            getInsertSql()
         } else {
             val pk = table.headers.first { it.pk == 1 }
-            sql = if (pk == null) {
+            if (pk == null) {
                 getInsertSql()
             } else {
                 getUpdateSql(pk)
             }
 
         }
-        db.db.execSQL(sql)
+        db.execSQL(sql.first, sql.second)
+        return this
     }
 
-    private fun getUpdateSql(pk: TableHeader): String {
-        return ""
-    }
-
-
-    fun getInsertSql(): String {
+    private fun getUpdateSql(pk: TableHeader): Pair<String, Array<Any?>> {
         val sb = StringBuilder()
-        sb.append("INSERT INTO ${table.tableName} (")
+        val array: ArrayList<Any?> = ArrayList()
+
+        sb.appendLine("UPDATE [${table.tableName}]")
+        sb.append("SET ")
+
+        table.headers.forEach {
+            if (it.pk != 1) {
+                sb.appendLine("[${it.name}] = ?,")
+                array.add(values[it.name])
+            }
+        }
+        sb.setLength(sb.length - 2)
+        sb.appendLine()
+
+        sb.appendLine(" WHERE [${pk.name}] = ?;")
+        array.add(values[pk.name])
+
+
+        return Pair(sb.toString(), array.toArray())
+    }
+
+
+    private fun getInsertSql(): Pair<String, Array<Any?>> {
+        val sb = StringBuilder()
+        val array: ArrayList<Any?> = ArrayList()
+
+        sb.append("INSERT INTO [${table.tableName}] (")
 
         values.keys.forEach {
-            sb.append("'$it', ")
+            sb.append("[$it], ")
         }
 
         sb.setLength(sb.length - 2)
         sb.append(") VALUES (")
         values.values.forEach {
-            sb.append("'$it', ")
+            sb.append("?, ")
+            array.add(it)
         }
         sb.setLength(sb.length - 2)
         sb.append(");")
 
-        return sb.toString()
+        return Pair(sb.toString(), array.toArray())
     }
 
     fun put(name: String, value: Any): Record {

@@ -45,19 +45,33 @@
                 app:srcCompat="@drawable/refresh" />
         </LinearLayout>
 
+        <EditText
+            android:id="@+id/database_sql_editor"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:maxLines="5"
+            android:text="@string/lib_name"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7">
+            android:layout_weight="7"
+            android:fillViewport="true">
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
                 <TableLayout
                     android:id="@+id/database_table"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
 
                 </TableLayout>
