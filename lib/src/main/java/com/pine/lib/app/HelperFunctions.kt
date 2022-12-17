@@ -5,11 +5,12 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.pine.lib.debug.e
 
 fun a(): Activity {
-    PineActivity.activity.get()?.let {
+    StaticPineActivity.activity.get()?.let {
         return it
     }
     e("activity没有被注入")
@@ -17,7 +18,7 @@ fun a(): Activity {
 }
 
 fun app(): Application {
-    return PineApplication.application
+    return StaticPineApplication.application
 }
 
 fun c(): Context {
@@ -29,7 +30,7 @@ fun stringResources(id: Int): String{
 }
 
 fun drawable(id: Int): Drawable {
-    return c().getDrawable(id)!!
+    return AppCompatResources.getDrawable(c(), id)!!
 }
 
 @Suppress("DEPRECATION")

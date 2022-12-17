@@ -6,17 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 
 open class PineAppCompatActivity: AppCompatActivity() {
     override fun onResume() {
-        PineActivity.onResume(this)
+        StaticPineActivity.onResume(this)
         super.onResume()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        PineActivity.onKeyDown(this, keyCode, event)
+        StaticPineActivity.onKeyDown(this, keyCode, event)
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        PineActivity.onCreate(this)
+        StaticPineActivity.onCreate(this)
         super.onCreate(savedInstanceState)
     }
 }

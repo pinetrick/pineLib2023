@@ -4,20 +4,19 @@ import android.app.Activity
 import android.view.KeyEvent
 import com.pine.lib.addone.MyTimer
 import com.pine.lib.app.C.keepScreenOn
-import com.pine.lib.debug.e
 import com.pine.lib.debug.window.DbgButton
 import com.pine.lib.hardware.keepScreenOn
 import com.pine.lib.view.toast.toast
 import java.lang.ref.WeakReference
 
-object PineActivity {
+object StaticPineActivity {
 
     //是否开启双击退出
     var enableDoubleReturnExit = false
     lateinit var activity: WeakReference<Activity>
 
     fun onCreate(activity: Activity) {
-        PineActivity.activity = WeakReference(activity)
+        StaticPineActivity.activity = WeakReference(activity)
         DbgButton.i()
 
         keepScreenOn(keepScreenOn)

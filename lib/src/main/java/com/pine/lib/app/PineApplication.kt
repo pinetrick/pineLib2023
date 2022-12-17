@@ -2,29 +2,10 @@ package com.pine.lib.app
 
 import android.app.Application
 
+open class PineApplication : Application() {
 
-object PineApplication {
-    lateinit var application: Application
-
-    fun onCreate(application: Application) {
-        this.application = application
-
-
-        if (C.isDebug) {
-            onDebugInit()
-        } else {
-            onLiveInit()
-        }
+    override fun onCreate() {
+        StaticPineApplication.onCreate(this)
+        super.onCreate()
     }
-
-    fun onDebugInit() {
-        C.isDebug = true
-        C.keepScreenOn = true
-    }
-
-    fun onLiveInit() {
-        C.isDebug = false
-        C.keepScreenOn = false
-    }
-
 }
