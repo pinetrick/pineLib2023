@@ -1,6 +1,10 @@
 package com.pine.lib.addone.db
 
 import android.database.Cursor
+import androidx.core.database.getBlobOrNull
+import androidx.core.database.getFloatOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 
 class Records {
 
@@ -25,8 +29,8 @@ class Records {
                 Cursor.FIELD_TYPE_BLOB -> "blob"
                 Cursor.FIELD_TYPE_FLOAT -> "float"
                 Cursor.FIELD_TYPE_INTEGER -> "integer"
-                Cursor.FIELD_TYPE_NULL -> "null"
                 Cursor.FIELD_TYPE_STRING -> "text"
+                Cursor.FIELD_TYPE_NULL -> "null"
                 else -> "unknown"
             }
 
@@ -41,8 +45,11 @@ class Records {
 
         headers.forEachIndexed { index, it ->
             val v = when (it.type.lowercase()) {
-                "text" -> c.getString(index)
-                "integer" -> c.getInt(index)
+                "blob" -> c.getBlobOrNull(index)
+                "float" -> c.getFloatOrNull(index)
+                "integer" -> c.getIntOrNull(index)
+                "text" -> c.getStringOrNull(index)
+                "null" -> null
                 else -> "Unknown"
             }
             record.values[it.name] = v

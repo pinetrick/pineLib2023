@@ -3,7 +3,7 @@ package com.pine.lib.addone.db
 class Record constructor(val db: Db, val table: Table) {
 
     var isNewRecord = true
-    var values: MutableMap<String, Any> = mutableMapOf()
+    var values: MutableMap<String, Any?> = mutableMapOf()
 
     fun save(): Record {
         if (!db.db.isOpen) return this
