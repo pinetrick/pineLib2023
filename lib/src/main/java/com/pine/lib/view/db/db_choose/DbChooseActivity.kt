@@ -49,7 +49,7 @@ class DbChooseActivity : PineAppCompatActivity() {
 
         closeButton.setOnClickListener { this.finish() }
         refreshButton.setOnClickListener { this.refreshDatabase() }
-        //addFakeData()
+        addFakeData()
         refreshDatabase()
     }
 
@@ -138,7 +138,7 @@ class DbChooseActivity : PineAppCompatActivity() {
             .put("colume1", "Unknown Value")
             .put("colume2", "Unknown Value")
             .put("colume3", "Unknown Value")
-            .put("colume4", "Unknown Value")
+            .put("colume4", null)
             .put("colume5", "Unknown Value")
             .put("colume6", "Unknown Value")
             .put("colume7", "Unknown Value")

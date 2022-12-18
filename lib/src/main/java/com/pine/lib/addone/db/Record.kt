@@ -69,7 +69,7 @@ class Record constructor(val db: Db, val table: Table) {
         return Pair(sb.toString(), array.toArray())
     }
 
-    fun put(name: String, value: Any): Record {
+    fun put(name: String, value: Any?): Record {
         values[name] = value
         return this
     }
