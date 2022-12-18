@@ -5,6 +5,7 @@ import androidx.core.database.getBlobOrNull
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
+import com.pine.lib.debug.e
 
 class Records {
 
@@ -22,16 +23,19 @@ class Records {
         this.tableName = table.tableName
         this.headers = ArrayList()
 
-        (0 until c.columnCount).forEach{
+        (0 until c.columnCount).forEach {
             val th = TableHeader()
             th.name = c.getColumnName(it)
-            th.type = when (c.getType(it)){
+            th.type = when (c.getType(it)) {
                 Cursor.FIELD_TYPE_BLOB -> "blob"
                 Cursor.FIELD_TYPE_FLOAT -> "float"
                 Cursor.FIELD_TYPE_INTEGER -> "integer"
                 Cursor.FIELD_TYPE_STRING -> "text"
                 Cursor.FIELD_TYPE_NULL -> "null"
-                else -> "unknown"
+                else -> {
+                    e("Unknown Type ${c.getType(it)}")
+                    "unknown"
+                }
             }
 
             headers.add(th)
@@ -50,7 +54,10 @@ class Records {
                 "integer" -> c.getIntOrNull(index)
                 "text" -> c.getStringOrNull(index)
                 "null" -> null
-                else -> "Unknown"
+                else -> {
+                    e("Unknown Type ${it.type}")
+                    "Unknown"
+                }
             }
             record.values[it.name] = v
         }
