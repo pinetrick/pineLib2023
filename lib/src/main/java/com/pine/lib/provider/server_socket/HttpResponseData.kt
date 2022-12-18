@@ -4,12 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import com.pine.lib.addone.DataCleanManager
 import com.pine.lib.addone.MyTimer
-import com.pine.lib.app.a
 import com.pine.lib.app.c
 import com.pine.lib.app.intent
+import com.pine.lib.debug.d
 import com.pine.lib.file.AssetsHelper
 import com.pine.lib.view.db.db_choose.DbChooseActivity
-import com.pine.lib.view.toast.toast
 import kotlin.system.exitProcess
 
 class HttpResponseData {
@@ -22,15 +21,23 @@ class HttpResponseData {
 
             res.toByteArray()
         } catch (e: Exception) {
-            toast(e)
-            index(opr).toByteArray()
+            tryOpenFile(route)
         }
 
 
     }
 
+    private fun tryOpenFile(route: String): ByteArray {
+        d("Open File: $route")
+        val file = AssetsHelper.readAsByteArray("html/$route")
+        file?.let { return it }
+        return "File Not Exit".toByteArray()
+    }
+
     fun index(opr: List<String>): String {
-        return AssetsHelper.read("html/index.html")
+        val file = AssetsHelper.read("html/index.html")
+        file?.let { return it }
+        return "File Not Exit"
     }
 
     // ---------- SYSTEM --------------
