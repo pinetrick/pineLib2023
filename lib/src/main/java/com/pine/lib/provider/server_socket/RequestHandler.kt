@@ -32,7 +32,7 @@ class RequestHandler(private val mContext: Context) {
             reader = BufferedReader(InputStreamReader(socket.getInputStream()))
             var line: String
             while (!TextUtils.isEmpty(reader.readLine().also { line = it })) {
-                if (line.startsWith("GET /")) {
+                if (line.startsWith("GET /") || line.startsWith("POST /")) {
                     val start = line.indexOf('/') + 1
                     val end = line.indexOf(' ', start)
                     route = line.substring(start, end)

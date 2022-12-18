@@ -40,13 +40,13 @@ class HttpResponseData {
         return "File Not Exit"
     }
 
-    // ---------- SYSTEM --------------
-    fun db(opr: List<String>): String {
+    // ---------- Title --------------
+    fun titleStartDbBrowser(opr: List<String>): String {
         intent(DbChooseActivity::class)
         return ret()
     }
 
-    fun exit(opr: List<String>): String {
+    fun titleExitApplication(opr: List<String>): String {
         MyTimer().setInterval(100).setOnTimerListener {
             exitProcess(0)
         }.start(1)
@@ -54,7 +54,7 @@ class HttpResponseData {
         return ret()
     }
 
-    fun deleteAllData(opr: List<String>): String {
+    fun titleDeleteAllData(opr: List<String>): String {
         MyTimer().setInterval(100).setOnTimerListener {
             DataCleanManager.cleanInternalCache(c())
             DataCleanManager.cleanDatabases(c())
@@ -68,7 +68,7 @@ class HttpResponseData {
 
     }
 
-    fun uninstall(opr: List<String>): String {
+    fun titleUninstallApplication(opr: List<String>): String {
         val intent = Intent()
         intent.action = Intent.ACTION_DELETE
         intent.data = Uri
