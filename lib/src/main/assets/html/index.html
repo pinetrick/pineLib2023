@@ -3,7 +3,7 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html lang="en">
+<html lang="en" ng-app="pinelib">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini" ng-controller="PageController as vm">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -27,7 +27,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/deleteAllData" class="nav-link">删除数据</a>
+        <a href="#title删除数据" ng-click="vm.titleDeleteAllData()" class="nav-link">删除数据</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="/uninstall" class="nav-link">卸载应用</a>
@@ -346,7 +346,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/angular/angular.min.js"></script>
+<script src="plugins/angular/angular-touch.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
