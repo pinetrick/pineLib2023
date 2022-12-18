@@ -97,7 +97,7 @@ class DbChooseActivity : PineAppCompatActivity() {
         var row = TableRow(a())
         records.headers.forEach {
             val textView = TableHeaderTextView(a())
-            textView.init(it.name)
+            textView.init(it.name + "\r\n[ " + it.type + " ]")
             row.addView(textView)
 
         }
