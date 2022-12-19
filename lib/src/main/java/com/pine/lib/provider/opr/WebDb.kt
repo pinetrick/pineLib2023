@@ -14,7 +14,12 @@ class WebDb {
 
     fun listDb(route: List<String>): String {
         val db = Db.getAllDb()
-        return gson().toJson(db)
+        val r = ArrayList<DbWithTable>()
+        db.forEach {
+            r.add(DbWithTable(it, Db(it).tables()))
+        }
+
+        return gson().toJson(r)
     }
 
     fun listTable(route: List<String>): String {
@@ -26,4 +31,9 @@ class WebDb {
         val data = Db(route[2]).model(route[3]).select()
         return gson().toJson(data)
     }
+
+    data class DbWithTable(
+        val dbName: String,
+        val tables: List<String>,
+    )
 }
