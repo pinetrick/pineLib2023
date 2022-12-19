@@ -4,8 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.pine.lib.app.c
-import com.pine.lib.debug.e
-import com.pine.lib.view.toast.toast
+import com.pine.lib.debug.libDb
 
 
 class Db(var dbName: String) {
@@ -54,8 +53,7 @@ class Db(var dbName: String) {
         bindArgs?.forEach {
             lastSql = lastSql.replaceFirst("?", "'$it'")
         }
-        toast(lastSql)
-        e(lastSql)
+        libDb?.recordSql(lastSql)
     }
 
     companion object {

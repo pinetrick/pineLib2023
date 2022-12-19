@@ -1,6 +1,7 @@
 package com.pine.lib.app
 
 import android.app.Application
+import com.pine.lib.debug.LibDb
 
 
 object StaticPineApplication {
@@ -15,6 +16,8 @@ object StaticPineApplication {
         } else {
             onLiveInit()
         }
+
+        LibDb()
     }
 
     fun onDebugInit() {

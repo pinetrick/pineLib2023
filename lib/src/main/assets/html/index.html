@@ -16,6 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="main.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 </head>
@@ -361,8 +362,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </tr>
 
                       <tr ng-repeat="record in vm.tableData.records">
-                        <td ng-repeat="value in record.values">
-                          {{value}}
+                        <td ng-repeat="(key, value) in record.values" class="p-0">
+                          <input type="text" ng-model="value" class="sql_input"
+                                 ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
                         </td>
                       </tr>
                     
