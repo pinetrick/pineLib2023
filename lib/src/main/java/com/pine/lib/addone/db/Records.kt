@@ -1,33 +1,36 @@
 package com.pine.lib.addone.db
 
 import android.database.Cursor
+import androidx.core.database.getBlobOrNull
+import androidx.core.database.getFloatOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
+import com.pine.lib.debug.e
 
-class Records {
-
-    var db: Db? = null
-    var table: Table? = null
-    var dbName = ""
-    var tableName: String? = null
-    var headers: ArrayList<TableHeader> = ArrayList()
-    var records: ArrayList<Record> = ArrayList()
-
+data class Records(
+    var dbName: String = "",
+    var tableName: String? = null,
+    var headers: ArrayList<TableHeader> = ArrayList(),
+    var records: ArrayList<Record> = ArrayList(),
+) {
     fun initHeadersBaseARecord(db: Db, table: Table, c: Cursor) {
-        this.db = db
-        this.table = table
         this.dbName = db.dbName
         this.tableName = table.tableName
         this.headers = ArrayList()
 
-        (0 until c.columnCount).forEach{
+        (0 until c.columnCount).forEach {
             val th = TableHeader()
             th.name = c.getColumnName(it)
-            th.type = when (c.getType(it)){
+            th.type = when (c.getType(it)) {
                 Cursor.FIELD_TYPE_BLOB -> "blob"
                 Cursor.FIELD_TYPE_FLOAT -> "float"
                 Cursor.FIELD_TYPE_INTEGER -> "integer"
-                Cursor.FIELD_TYPE_NULL -> "null"
                 Cursor.FIELD_TYPE_STRING -> "text"
-                else -> "unknown"
+                Cursor.FIELD_TYPE_NULL -> "null"
+                else -> {
+                    e("Unknown Type ${c.getType(it)}")
+                    "unknown"
+                }
             }
 
             headers.add(th)
@@ -36,14 +39,20 @@ class Records {
     }
 
     fun anylizeLine(c: Cursor) {
-        val record = Record(db!!, table!!)
+        val record = Record(dbName, tableName)
         record.isNewRecord = false
 
         headers.forEachIndexed { index, it ->
             val v = when (it.type.lowercase()) {
-                "text" -> c.getString(index)
-                "integer" -> c.getInt(index)
-                else -> "Unknown"
+                "blob" -> c.getBlobOrNull(index)
+                "float" -> c.getFloatOrNull(index)
+                "integer" -> c.getIntOrNull(index)
+                "text" -> c.getStringOrNull(index)
+                "null" -> null
+                else -> {
+                    e("Unknown Type ${it.type}")
+                    "Unknown"
+                }
             }
             record.values[it.name] = v
         }

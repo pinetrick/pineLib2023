@@ -1,17 +1,20 @@
 package com.pine.lib.addone.db
 
-class Record constructor(val db: Db, val table: Table) {
+class Record constructor(val dbName: String, val tableName: String?) {
 
     var isNewRecord = true
-    var values: MutableMap<String, Any> = mutableMapOf()
+    var values: MutableMap<String, Any?> = mutableMapOf()
 
     fun save(): Record {
-        if (!db.db.isOpen) return this
+        val db = Db.getDb(dbName)
+        val table = db.model(tableName!!)
+
+        if (!db.isOpen()) return this
 
         val sql: Pair<String, Array<Any?>> = if (isNewRecord) {
             getInsertSql()
         } else {
-            val pk = table.headers.first { it.pk == 1 }
+            val pk = table.headers.firstOrNull { it.pk == 1 }
             if (pk == null) {
                 getInsertSql()
             } else {
@@ -24,10 +27,12 @@ class Record constructor(val db: Db, val table: Table) {
     }
 
     private fun getUpdateSql(pk: TableHeader): Pair<String, Array<Any?>> {
+        val db = Db.getDb(dbName)
+        val table = db.model(tableName!!)
         val sb = StringBuilder()
         val array: ArrayList<Any?> = ArrayList()
 
-        sb.appendLine("UPDATE [${table.tableName}]")
+        sb.appendLine("UPDATE [$tableName]")
         sb.append("SET ")
 
         table.headers.forEach {
@@ -51,7 +56,7 @@ class Record constructor(val db: Db, val table: Table) {
         val sb = StringBuilder()
         val array: ArrayList<Any?> = ArrayList()
 
-        sb.append("INSERT INTO [${table.tableName}] (")
+        sb.append("INSERT INTO [${tableName}] (")
 
         values.keys.forEach {
             sb.append("[$it], ")
@@ -69,7 +74,7 @@ class Record constructor(val db: Db, val table: Table) {
         return Pair(sb.toString(), array.toArray())
     }
 
-    fun put(name: String, value: Any): Record {
+    fun put(name: String, value: Any?): Record {
         values[name] = value
         return this
     }

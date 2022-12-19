@@ -19,6 +19,7 @@ import com.pine.lib.addone.sharepreference.spGet
 import com.pine.lib.addone.sharepreference.spSet
 import com.pine.lib.app.a
 import com.pine.lib.app.c
+import com.pine.lib.net.NetworkUtils
 import com.pine.lib.view.message_box.MessageBox
 import com.pine.lib.view.toast.toast
 
@@ -81,6 +82,9 @@ class DbgButton : View.OnTouchListener, View.OnClickListener {
         // 设置悬浮窗的Touch监听
         debugBtn.setOnTouchListener(this)
         debugBtn.setOnClickListener(this)
+        var textButton = debugBtn.findViewById<Button>(R.id.btn_debug)
+        textButton.text = NetworkUtils.getIpAddress().split(".")[3]
+
         try {
             wm.addView(baseView, params)
             isAdded = true

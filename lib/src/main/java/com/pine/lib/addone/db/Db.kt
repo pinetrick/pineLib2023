@@ -10,10 +10,14 @@ import com.pine.lib.view.toast.toast
 
 class Db(var dbName: String) {
     var lastSql: String = ""
-    var db: SQLiteDatabase = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
+    private var db: SQLiteDatabase = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
+
+    fun isOpen(): Boolean {
+        return db.isOpen
+    }
 
     fun model(tableName: String): Table {
-        return Table(this, tableName)
+        return Table(dbName, tableName)
     }
 
     fun tables(): List<String> {
@@ -40,7 +44,7 @@ class Db(var dbName: String) {
         return db.rawQuery(sql, selectionArgs)
     }
 
-    fun execSQL(sql: String, bindArgs: Array<Any?>) {
+    fun execSQL(sql: String, bindArgs: Array<Any?> = emptyArray()) {
         logSql(sql, bindArgs)
         return db.execSQL(sql, bindArgs)
     }
@@ -55,10 +59,19 @@ class Db(var dbName: String) {
     }
 
     companion object {
+        private val dbs: HashMap<String, Db> = HashMap()
+
         fun getAllDb(): List<String> {
             return c().databaseList().toList().filter {
                 !it.contains("journal")
             }.reversed()
+        }
+
+        fun getDb(dbName: String): Db {
+            if (dbs[dbName] == null) {
+                dbs[dbName] = Db(dbName)
+            }
+            return dbs[dbName]!!
         }
     }
 }

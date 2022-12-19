@@ -21,7 +21,7 @@ class TableHeaderTextView : AppCompatTextView {
         text = key
 
         textSize = 10.0f
-        height = 30
+        height = 60
         textAlignment = TEXT_ALIGNMENT_CENTER
         setTypeface(null, Typeface.BOLD)
 
