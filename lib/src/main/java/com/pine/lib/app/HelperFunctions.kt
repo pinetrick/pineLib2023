@@ -43,7 +43,7 @@ fun isActivityInjected(): Boolean {
 }
 
 fun app(): Application {
-    return StaticPineApplication.application
+    return StaticPineApplication.application!!
 }
 
 fun c(): Context {

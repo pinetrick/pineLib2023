@@ -17,6 +17,9 @@ object StaticPineActivity {
 
     fun onCreate(activity: Activity) {
         StaticPineActivity.activity = WeakReference(activity)
+        if (StaticPineApplication.application == null) {
+            StaticPineApplication.application = activity.application
+        }
         DbgButton.i()
 
         keepScreenOn(keepScreenOn)

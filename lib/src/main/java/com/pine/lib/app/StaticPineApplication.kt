@@ -4,7 +4,7 @@ import android.app.Application
 
 
 object StaticPineApplication {
-    lateinit var application: Application
+    var application: Application? = null
 
     fun onCreate(application: Application) {
         this.application = application
