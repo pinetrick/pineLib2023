@@ -49,7 +49,7 @@ class DbChooseActivity : PineAppCompatActivity() {
 
         closeButton.setOnClickListener { this.finish() }
         refreshButton.setOnClickListener { this.refreshDatabase() }
-        addFakeData()
+        //addFakeData()
         refreshDatabase()
     }
 
