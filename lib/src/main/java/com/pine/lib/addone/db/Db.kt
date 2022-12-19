@@ -10,13 +10,17 @@ import com.pine.lib.debug.libDb
 class Db(var dbName: String) {
     var lastSql: String = ""
     private var db: SQLiteDatabase = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
+    private val tablesMap: HashMap<String, Table> = HashMap()
 
     fun isOpen(): Boolean {
         return db.isOpen
     }
 
     fun model(tableName: String): Table {
-        return Table(dbName, tableName)
+        if (tablesMap[tableName] == null) {
+            tablesMap[tableName] = Table(dbName, tableName)
+        }
+        return tablesMap[tableName]!!
     }
 
     fun tables(): List<String> {

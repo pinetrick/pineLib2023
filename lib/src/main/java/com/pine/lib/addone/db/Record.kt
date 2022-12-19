@@ -2,6 +2,7 @@ package com.pine.lib.addone.db
 
 class Record constructor(val dbName: String, val tableName: String?) {
 
+    var pk: String? = null
     var isNewRecord = true
     var values: MutableMap<String, Any?> = mutableMapOf()
 

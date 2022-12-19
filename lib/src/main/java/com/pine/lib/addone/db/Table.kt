@@ -5,6 +5,9 @@ import androidx.core.database.getStringOrNull
 
 class Table constructor(val dbName: String, val tableName: String) {
     private val db: Db = Db.getDb(dbName)
+    private val pk: String? by lazy {
+        headers.firstOrNull{ it.pk == 1}?.name
+    }
 
     val headers: ArrayList<TableHeader> by lazy {
         if (!db.isOpen()) {
@@ -49,7 +52,7 @@ class Table constructor(val dbName: String, val tableName: String) {
                 if (records.dbName.isEmpty()) {
                     records.initHeadersBaseARecord(db, this, c)
                 }
-                records.anylizeLine(c)
+                records.anylizeLine(c, pk)
                 c.moveToNext()
             }
         }

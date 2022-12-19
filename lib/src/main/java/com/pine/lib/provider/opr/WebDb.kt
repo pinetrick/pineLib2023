@@ -2,6 +2,7 @@ package com.pine.lib.provider.opr
 
 import com.pine.lib.addone.db.Db
 import com.pine.lib.app.gson
+import java.net.URLDecoder
 
 
 class WebDb {
@@ -29,6 +30,13 @@ class WebDb {
 
     fun select(route: List<String>): String {
         val data = Db(route[2]).model(route[3]).select()
+        return gson().toJson(data)
+    }
+
+    fun exec(route: List<String>): String {
+        val sql = URLDecoder.decode(route[3], "UTF-8")
+        val data = Db(route[2]).execSQL(sql)
+
         return gson().toJson(data)
     }
 

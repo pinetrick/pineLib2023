@@ -38,9 +38,10 @@ data class Records(
 
     }
 
-    fun anylizeLine(c: Cursor) {
+    fun anylizeLine(c: Cursor, pk: String? = null) {
         val record = Record(dbName, tableName)
         record.isNewRecord = false
+        record.pk = pk
 
         headers.forEachIndexed { index, it ->
             val v = when (it.type.lowercase()) {
