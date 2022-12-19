@@ -8,6 +8,7 @@ import com.pine.lib.app.c
 import com.pine.lib.app.intent
 import com.pine.lib.debug.d
 import com.pine.lib.file.AssetsHelper
+import com.pine.lib.provider.opr.WebDb
 import com.pine.lib.view.db.db_choose.DbChooseActivity
 import kotlin.system.exitProcess
 
@@ -21,7 +22,9 @@ class HttpResponseData {
 
             res.toByteArray()
         } catch (e: Exception) {
+            e.printStackTrace()
             tryOpenFile(route)
+
         }
 
 
@@ -38,6 +41,10 @@ class HttpResponseData {
         val file = AssetsHelper.read("html/index.html")
         file?.let { return it }
         return "File Not Exit"
+    }
+
+    fun db(opr: List<String>): String {
+        return WebDb().run(opr)
     }
 
     // ---------- Title --------------

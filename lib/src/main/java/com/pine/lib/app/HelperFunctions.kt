@@ -7,7 +7,17 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.pine.lib.debug.e
+
+private var mGson: Gson? = null
+fun gson(): Gson {
+    if (mGson == null) {
+        mGson = GsonBuilder().serializeNulls().create()
+    }
+    return mGson!!
+}
 
 fun a(): Activity {
     try {
@@ -26,7 +36,7 @@ fun isActivityInjected(): Boolean {
         StaticPineActivity.activity.get()?.let {
             return true
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
 
     }
     return false

@@ -7,18 +7,13 @@ import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import com.pine.lib.debug.e
 
-class Records {
-
-    var db: Db? = null
-    var table: Table? = null
-    var dbName = ""
-    var tableName: String? = null
-    var headers: ArrayList<TableHeader> = ArrayList()
-    var records: ArrayList<Record> = ArrayList()
-
+data class Records(
+    var dbName: String = "",
+    var tableName: String? = null,
+    var headers: ArrayList<TableHeader> = ArrayList(),
+    var records: ArrayList<Record> = ArrayList(),
+) {
     fun initHeadersBaseARecord(db: Db, table: Table, c: Cursor) {
-        this.db = db
-        this.table = table
         this.dbName = db.dbName
         this.tableName = table.tableName
         this.headers = ArrayList()
@@ -44,7 +39,7 @@ class Records {
     }
 
     fun anylizeLine(c: Cursor) {
-        val record = Record(db!!, table!!)
+        val record = Record(dbName, tableName)
         record.isNewRecord = false
 
         headers.forEachIndexed { index, it ->
