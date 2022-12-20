@@ -345,8 +345,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </tr>
 
                       <tr ng-repeat="(index, record) in vm.tableData.records">
-                        <td ng-repeat="(key, value) in record.values" class="p-0">
-                          <span class="dbSpanNoWrap" ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
+                        <td ng-repeat="(key, value) in record.values" class="p-0 dbColumnLenghtLimit">
+                          <span ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
                           <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
                                  ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
                       </tr>
