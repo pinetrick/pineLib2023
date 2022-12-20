@@ -13,9 +13,9 @@ data class Records(
     var headers: ArrayList<TableHeader> = ArrayList(),
     var records: ArrayList<Record> = ArrayList(),
 ) {
-    fun initHeadersBaseARecord(db: Db, table: Table, c: Cursor) {
-        this.dbName = db.dbName
-        this.tableName = table.tableName
+    fun initHeadersBaseARecord(dbName: String, tableName: String?, c: Cursor) {
+        this.dbName = dbName
+        this.tableName = tableName
         this.headers = ArrayList()
 
         (0 until c.columnCount).forEach {

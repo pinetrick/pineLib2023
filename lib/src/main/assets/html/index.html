@@ -247,23 +247,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   
   <div ng-show="vm.page=='db'">
     <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>Database</h1>
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Database</li>
-              </ol>
-            </div>
-          </div>
-        </div><!-- /.container-fluid -->
-      </section>
-
+      
       <!-- Main content -->
       <section class="content">
         <div class="row">
@@ -300,17 +284,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-md-10">
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h3 class="card-title">{{vm.tableData.tableName}}</h3>
+                <h3 class="card-title">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" ng-model="vm.last_sql" placeholder="SQL">
+                  </div>
+                </h3>
 
                 <div class="card-tools">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Search Mail">
-                    <div class="input-group-append">
-                      <div class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                      </div>
+                  <div class="btn btn-primary">
+                      <i class="fas fa-search"></i>
                     </div>
-                  </div>
                 </div>
                 <!-- /.card-tools -->
               </div>
