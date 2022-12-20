@@ -11,15 +11,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+  <link rel="stylesheet" href="main.css">
 </head>
-<body class="hold-transition sidebar-mini" ng-controller="PageController as vm">
+<body class="hold-transition sidebar-mini sidebar-collapse" ng-controller="PageController as vm">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -242,27 +242,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.sidebar -->
   </aside>
 
-  <!-- Content Wrapper. Contains page content -->
+  <!----------------------------------------- database ----------------------------------------------------------------->
   
   <div ng-show="vm.page=='db'">
     <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>Database</h1>
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Database</li>
-              </ol>
-            </div>
-          </div>
-        </div><!-- /.container-fluid -->
-      </section>
-
+      
       <!-- Main content -->
       <section class="content">
         <div class="row">
@@ -299,19 +283,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-md-10">
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h3 class="card-title">{{vm.tableData.tableName}}</h3>
-
-                <div class="card-tools">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Search Mail">
-                    <div class="input-group-append">
-                      <div class="btn btn-primary">
+                <div class="row">
+                  <div class="col-md-11">
+                    <textarea class="form-control" ng-model="vm.tableData.sql"></textarea>
+                  </div>
+                
+                  <div class="col-md-1">
+                    <div class="btn btn-primary" ng-click="vm.dbRawQuery(vm.choosedDbName ,vm.tableData.sql)">
                         <i class="fas fa-search"></i>
                       </div>
-                    </div>
                   </div>
                 </div>
-                <!-- /.card-tools -->
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -360,10 +342,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </td>
                       </tr>
 
-                      <tr ng-repeat="record in vm.tableData.records">
-                        <td ng-repeat="value in record.values">
-                          {{value}}
-                        </td>
+                      <tr ng-repeat="(index, record) in vm.tableData.records">
+                        <td ng-repeat="(key, value) in record.values" class="p-0 dbColumnLenghtLimit">
+                          <span ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
+                          <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
+                                 ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
                       </tr>
                     
                     </tbody>
@@ -448,12 +431,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="plugins/angular/angular.min.js"></script>
-<script src="plugins/toastr/toastr.min.js"></script>
-<script src="plugins/angular/angular-touch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-touch.min.js"></script>
 <!-- AdminLTE App -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <script src="main.js"></script>

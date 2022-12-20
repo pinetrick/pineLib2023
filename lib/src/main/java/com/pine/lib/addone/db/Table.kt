@@ -3,8 +3,11 @@ package com.pine.lib.addone.db
 import android.database.Cursor
 import androidx.core.database.getStringOrNull
 
-class Table constructor(val dbName: String, val tableName: String) {
+class Table constructor(val dbName: String, val tableName: String? = null) {
     private val db: Db = Db.getDb(dbName)
+    private val pk: String? by lazy {
+        headers.firstOrNull{ it.pk == 1}?.name
+    }
 
     val headers: ArrayList<TableHeader> by lazy {
         if (!db.isOpen()) {
@@ -40,21 +43,8 @@ class Table constructor(val dbName: String, val tableName: String) {
     fun select(): Records {
         if (!db.isOpen()) return Records()
 
-        val c: Cursor = db.rawQuery("SELECT * FROM $tableName")
+        return db.recordsFromRawQuery("SELECT * FROM [$tableName]")
 
-        val records = Records()
-
-        if (c.moveToFirst()) {
-            while (!c.isAfterLast) {
-                if (records.dbName.isEmpty()) {
-                    records.initHeadersBaseARecord(db, this, c)
-                }
-                records.anylizeLine(c)
-                c.moveToNext()
-            }
-        }
-        c.close()
-        return records
     }
 
 

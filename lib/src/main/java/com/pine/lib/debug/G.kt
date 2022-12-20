@@ -8,7 +8,7 @@ var tag = "--- PineDebug ---"
 
 fun d(s: Any) {
     if (C.isDebug) {
-        Log.d(tag, s.toString());
+        Log.d(tag, s.toString())
     }
 
 
@@ -16,22 +16,21 @@ fun d(s: Any) {
 
 fun i(s: Any) {
     if (C.isDebug) {
-        Log.i(tag, s.toString());
+        Log.i(tag, s.toString())
     }
 }
 
 fun w(s: Any) {
-    Log.w(tag, s.toString());
+    Log.w(tag, s.toString())
     if (C.isDebug) {
         toast(s)
     }
 }
 
 fun e(s: Any) {
-    Log.e(tag, s.toString());
+    Log.e(tag, s.toString())
     if (C.isDebug) {
         toast(s)
     }
 }
-
 

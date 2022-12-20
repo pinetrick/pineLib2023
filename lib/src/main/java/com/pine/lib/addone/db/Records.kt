@@ -10,12 +10,13 @@ import com.pine.lib.debug.e
 data class Records(
     var dbName: String = "",
     var tableName: String? = null,
+    var sql: String? = null,
     var headers: ArrayList<TableHeader> = ArrayList(),
     var records: ArrayList<Record> = ArrayList(),
 ) {
-    fun initHeadersBaseARecord(db: Db, table: Table, c: Cursor) {
-        this.dbName = db.dbName
-        this.tableName = table.tableName
+    fun initHeadersBaseARecord(dbName: String, tableName: String?, c: Cursor) {
+        this.dbName = dbName
+        this.tableName = tableName
         this.headers = ArrayList()
 
         (0 until c.columnCount).forEach {
@@ -38,9 +39,10 @@ data class Records(
 
     }
 
-    fun anylizeLine(c: Cursor) {
+    fun anylizeLine(c: Cursor, pk: String? = null) {
         val record = Record(dbName, tableName)
         record.isNewRecord = false
+        record.pk = pk
 
         headers.forEachIndexed { index, it ->
             val v = when (it.type.lowercase()) {

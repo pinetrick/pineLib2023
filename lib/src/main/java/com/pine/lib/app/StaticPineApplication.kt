@@ -1,10 +1,11 @@
 package com.pine.lib.app
 
 import android.app.Application
+import com.pine.lib.debug.LibDb
 
 
 object StaticPineApplication {
-    lateinit var application: Application
+    var application: Application? = null
 
     fun onCreate(application: Application) {
         this.application = application
@@ -15,6 +16,8 @@ object StaticPineApplication {
         } else {
             onLiveInit()
         }
+
+        LibDb()
     }
 
     fun onDebugInit() {
