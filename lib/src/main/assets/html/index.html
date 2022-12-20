@@ -344,11 +344,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </td>
                       </tr>
 
-                      <tr ng-repeat="record in vm.tableData.records">
+                      <tr ng-repeat="(index, record) in vm.tableData.records">
                         <td ng-repeat="(key, value) in record.values" class="p-0">
-                          <input type="text" ng-model="value" class="sql_input"
+                          <span class="dbSpanNoWrap" ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
+                          <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
                                  ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
-                        </td>
                       </tr>
                     
                     </tbody>

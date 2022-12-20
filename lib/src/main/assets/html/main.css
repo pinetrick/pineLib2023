@@ -2,5 +2,11 @@
     border: none;
     width: 100%;
     height: 100%;
+}
 
+.dbSpanNoWrap{
+    white-space: nowrap;
+    overflow: hidden; /* 隐藏超出部分 */
+    text-overflow: ellipsis; /* 用省略号表示多余的 */
+    max-width: 80ch; /* 限制最大显示长度为 80 个字符 */
 }
