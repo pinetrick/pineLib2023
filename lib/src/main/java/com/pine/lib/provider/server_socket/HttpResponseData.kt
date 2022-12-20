@@ -22,7 +22,6 @@ class HttpResponseData {
 
             res.toByteArray()
         } catch (e: Exception) {
-            e.printStackTrace()
             tryOpenFile(route)
 
         }

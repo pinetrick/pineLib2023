@@ -30,12 +30,13 @@ class RequestHandler(private val mContext: Context) {
 
             // Read HTTP headers and parse out the route.
             reader = BufferedReader(InputStreamReader(socket.getInputStream()))
-            var line: String
+            var line: String?
             while (!TextUtils.isEmpty(reader.readLine().also { line = it })) {
-                if (line.startsWith("GET /") || line.startsWith("POST /")) {
-                    val start = line.indexOf('/') + 1
-                    val end = line.indexOf(' ', start)
-                    route = line.substring(start, end)
+                if (line == null) break
+                if (line!!.startsWith("GET /") || line!!.startsWith("POST /")) {
+                    val start = line!!.indexOf('/') + 1
+                    val end = line!!.indexOf(' ', start)
+                    route = line!!.substring(start, end)
                     break
                 }
             }
