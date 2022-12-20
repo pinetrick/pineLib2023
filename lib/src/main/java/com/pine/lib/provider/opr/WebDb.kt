@@ -40,7 +40,7 @@ class WebDb {
         return gson().toJson(data)
     }
 
-    fun rawQuery(route: List<String>): String {
+    fun query(route: List<String>): String {
         val sql = URLDecoder.decode(route[3], "UTF-8")
         val data = Db(route[2]).recordsFromRawQuery(sql)
 

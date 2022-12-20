@@ -54,7 +54,7 @@ class Db(var dbName: String) {
         val pk = getPrimaryKey(sql)
 
         val records = Records()
-
+        records.sql = lastSql
         if (c.moveToFirst()) {
             while (!c.isAfterLast) {
 
@@ -114,11 +114,12 @@ class Db(var dbName: String) {
     }
 
     private fun logSql(sql: String, bindArgs: Array<Any?>? = null) {
-        lastSql = sql
+        var _sql = sql
         bindArgs?.forEach {
-            lastSql = lastSql.replaceFirst("?", "'$it'")
+            _sql = _sql.replaceFirst("?", "'$it'")
         }
-        libDb?.recordSql(lastSql)
+        if (libDb?.callFromLibDb == false) lastSql = _sql
+        libDb?.recordSql(_sql)
     }
 
     companion object {

@@ -35,11 +35,8 @@ class LibDb() {
                 }
             }
             finally {
-
                 callFromLibDb = false
             }
-
-
         }
     }
 }

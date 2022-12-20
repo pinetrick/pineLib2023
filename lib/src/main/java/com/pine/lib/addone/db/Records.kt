@@ -10,6 +10,7 @@ import com.pine.lib.debug.e
 data class Records(
     var dbName: String = "",
     var tableName: String? = null,
+    var sql: String? = null,
     var headers: ArrayList<TableHeader> = ArrayList(),
     var records: ArrayList<Record> = ArrayList(),
 ) {
