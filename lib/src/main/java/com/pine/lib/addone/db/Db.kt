@@ -57,7 +57,6 @@ class Db(var dbName: String) {
         records.sql = lastSql
         if (c.moveToFirst()) {
             while (!c.isAfterLast) {
-
                 if (records.dbName.isEmpty()) {
                     records.initHeadersBaseARecord(dbName, singleTableName, c)
                 }

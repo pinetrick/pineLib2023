@@ -8,9 +8,15 @@ import java.net.URLDecoder
 class WebDb {
 
     fun run(route: List<String>): String {
-        val func = this::class.java.getDeclaredMethod(route[1], List::class.java)
+        try {
+            val func = this::class.java.getDeclaredMethod(route[1], List::class.java)
 
-        return func.invoke(this, route) as String
+            return func.invoke(this, route) as String
+        }
+        catch (e: Exception) {
+            return e.stackTraceToString().replace("\r\n", "<br>")
+        }
+
     }
 
     fun listDb(route: List<String>): String {
