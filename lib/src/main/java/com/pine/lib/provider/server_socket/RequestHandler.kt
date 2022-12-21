@@ -2,7 +2,6 @@ package com.pine.lib.provider.server_socket
 
 import android.content.Context
 import android.content.res.AssetManager
-import android.text.TextUtils
 import java.io.*
 import java.net.Socket
 import java.util.*
@@ -15,7 +14,7 @@ class RequestHandler(private val mContext: Context) {
     private val mAssets: AssetManager
     private var mSelectedDatabase: String? = null
 
-    private var responseData = HttpResponseData()
+    private var responseHandler = HttpResponseHandler()
 
     init {
         mAssets = mContext.resources.assets
@@ -25,45 +24,52 @@ class RequestHandler(private val mContext: Context) {
     fun handle(socket: Socket) {
         var reader: BufferedReader? = null
         var output: PrintStream? = null
+        val requestData = RequestData()
+        val responseData = ResponseData()
+
         try {
             var route: String? = null
 
             // Read HTTP headers and parse out the route.
             reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+
             var line: String?
-            while (!TextUtils.isEmpty(reader.readLine().also { line = it })) {
-                if (line == null) break
-                if (line!!.startsWith("GET /") || line!!.startsWith("POST /")) {
-                    val start = line!!.indexOf('/') + 1
-                    val end = line!!.indexOf(' ', start)
-                    route = line!!.substring(start, end)
-                    break
-                }
+            var lines: ArrayList<String> = ArrayList()
+            while (reader.readLine().also { line = it } != null && line!!.length !== 0) {
+                lines.add(line!!)
+            }
+            var allData = lines.joinToString("\n").trim()
+
+            val requestMethod = Regex("^(GET|POST|PUT)").find(allData)?.value
+            val path = Regex("^\\w+\\s(/[^\\s^\\?^#]*)").find(allData)?.groupValues?.get(1)
+            val params = Regex("([^&=?]+)=([^&=\\s]+)").findAll(lines[0])
+                .map { it.groupValues[1] to it.groupValues[2] }.toList()
+            val contentLength =
+                Regex("Content-Length: (\\d+)").find(allData)?.groupValues?.get(1)?.toInt() ?: 0
+            val body = lines.takeLast(contentLength).joinToString("\n")
+            val bodyParams = Regex("([^&=?]+)=([^&=]+)").findAll(body)
+                .map { it.groupValues[1] to it.groupValues[2] }.toList()
+
+            requestData.method = requestMethod!!
+            requestData.urls = path!!.removePrefix("/").split("/")
+            params.forEach {
+                requestData.args[it.first] = it.second
             }
 
-            // Output stream that we send the response to
+
             output = PrintStream(socket.getOutputStream())
-            if (route == null || route.isEmpty()) {
-                route = "index"
-            }
-            val bytes = responseData.getResponse(route)
-
-            if (null == bytes) {
-                writeServerError(output)
-                return
+            if (requestData.urls.size == 1 && requestData.urls[0].isEmpty()) {
+                requestData.urls = arrayListOf("index")
             }
 
-            // Send out the content.
-            output.println("HTTP/1.0 200 OK")
-            output.println("Content-Type: " + detectMimeType(route))
-            if (route.startsWith("downloadDb")) {
-                output.println("Content-Disposition: attachment; filename=$mSelectedDatabase")
-            } else {
-                output.println("Content-Length: " + bytes.size)
-            }
-            output.println()
-            output.write(bytes)
-            output.flush()
+            responseData.request = requestData
+            responseHandler.getResponse(requestData, responseData)
+
+            responseData.writeResponse(output)
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         } finally {
             try {
                 output?.close()
@@ -74,21 +80,6 @@ class RequestHandler(private val mContext: Context) {
         }
     }
 
-    private fun detectMimeType(fileName: String): String? {
-        return if (TextUtils.isEmpty(fileName)) {
-            null
-        } else if (fileName.endsWith(".html")) {
-            "text/html"
-        } else if (fileName.endsWith(".js")) {
-            "application/javascript"
-        } else if (fileName.endsWith(".css")) {
-            "text/css"
-        } else if (fileName.endsWith(".zip")) {
-            "application/octet-stream"
-        } else {
-            "text/html"
-        }
-    }
 
     private fun writeServerError(output: PrintStream) {
         output.println("HTTP/1.0 500 Internal Server Error")

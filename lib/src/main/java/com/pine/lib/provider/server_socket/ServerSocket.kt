@@ -41,22 +41,22 @@ class ClientServer(port: Int = 8080) : Runnable {
     }
 
     override fun run() {
-        try {
-            mServerSocket = ServerSocket(mPort)
-            while (isRunning) {
+        mServerSocket = ServerSocket(mPort)
+        while (isRunning) {
+            try {
                 val socket = mServerSocket!!.accept()
                 mRequestHandler.handle(socket)
                 socket.close()
+            } catch (e: SocketException) {
+                // The server was stopped; ignore.
+                e("SocketException")
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e("Web server error.")
+            } catch (ignore: Exception) {
+                e("Exception.")
+                ignore.printStackTrace()
             }
-        } catch (e: SocketException) {
-            // The server was stopped; ignore.
-            e("SocketException")
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e("Web server error.")
-        } catch (ignore: Exception) {
-            e("Exception.")
-            ignore.printStackTrace()
         }
     }
 }

@@ -1,56 +1,39 @@
 package com.pine.lib.provider.opr
 
 import com.pine.lib.addone.db.Db
-import com.pine.lib.app.gson
 import java.net.URLDecoder
 
 
-class WebDb {
+class WebDb : BaseOpr() {
 
-    fun run(route: List<String>): String {
-        try {
-            val func = this::class.java.getDeclaredMethod(route[1], List::class.java)
-
-            return func.invoke(this, route) as String
-        }
-        catch (e: Exception) {
-            return e.stackTraceToString().replace("\r\n", "<br>")
-        }
-
-    }
-
-    fun listDb(route: List<String>): String {
+    fun listDb() {
         val db = Db.getAllDb()
         val r = ArrayList<DbWithTable>()
         db.forEach {
             r.add(DbWithTable(it, Db(it).tables()))
         }
 
-        return gson().toJson(r)
+        responseData.returnObj = r
     }
 
-    fun listTable(route: List<String>): String {
-        val tables = Db(route[2]).tables()
-        return gson().toJson(tables)
+    fun listTable() {
+        responseData.returnObj = Db(requestData.urls[2]).tables()
+
     }
 
-    fun select(route: List<String>): String {
-        val data = Db(route[2]).model(route[3]).limit(100).order("id DESC").select()
-        return gson().toJson(data)
+    fun select() {
+        responseData.returnObj =
+            Db(requestData.urls[2]).model(requestData.urls[3]).limit(100).order("id DESC").select()
     }
 
-    fun exec(route: List<String>): String {
-        val sql = URLDecoder.decode(route[3], "UTF-8")
-        val data = Db(route[2]).execSQL(sql)
-
-        return gson().toJson(data)
+    fun exec() {
+        val sql = URLDecoder.decode(requestData.urls[3], "UTF-8")
+        responseData.returnObj = Db(requestData.urls[2]).execSQL(sql)
     }
 
-    fun query(route: List<String>): String {
-        val sql = URLDecoder.decode(route[3], "UTF-8")
-        val data = Db(route[2]).recordsFromRawQuery(sql)
-
-        return gson().toJson(data)
+    fun query() {
+        val sql = URLDecoder.decode(requestData.urls[3], "UTF-8")
+        responseData.returnObj = Db(requestData.urls[2]).recordsFromRawQuery(sql)
     }
 
     data class DbWithTable(
