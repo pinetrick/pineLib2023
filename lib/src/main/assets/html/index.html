@@ -337,13 +337,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <tbody>
 
                       <tr>
-                        <td ng-repeat="header in vm.tableData.headers">
+                        <td ng-repeat="header in vm.tableData.headers" class="pl-0">
                           {{header.name}}
                         </td>
                       </tr>
 
                       <tr ng-repeat="(index, record) in vm.tableData.records">
-                        <td ng-repeat="(key, value) in record.values" class="p-0 dbColumnLenghtLimit">
+                        <td ng-repeat="(key, value) in record.values" class="py-0 px-1 dbColumnLenghtLimit">
                           <span ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
                           <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
                                  ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
