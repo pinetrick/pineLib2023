@@ -5,9 +5,14 @@ import androidx.core.database.getStringOrNull
 
 class Table constructor(val dbName: String, val tableName: String? = null) {
     private val db: Db = Db.getDb(dbName)
+
     private val pk: String? by lazy {
-        headers.firstOrNull{ it.pk == 1}?.name
+        headers.firstOrNull { it.pk == 1 }?.name
     }
+
+    private var orderBy: String? = null
+    private var limit: String? = null
+    private var where: ArrayList<String>? = null
 
     val headers: ArrayList<TableHeader> by lazy {
         if (!db.isOpen()) {
@@ -40,11 +45,48 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         return Record(dbName, tableName)
     }
 
+    fun order(order: String): Table {
+        this.orderBy = order
+        return this
+    }
+
+    fun limit(limit: Int): Table {
+        this.limit = limit.toString()
+        return this
+    }
+
+    fun where(key: String, value: String): Table {
+        return where("$key = $value")
+    }
+
+    fun where(condition: String): Table {
+        if (this.where == null) {
+            this.where = ArrayList()
+        }
+        this.where!!.add(condition)
+
+
+        return this
+    }
+
     fun select(): Records {
         if (!db.isOpen()) return Records()
 
-        return db.recordsFromRawQuery("SELECT * FROM [$tableName]")
+        val sb = StringBuilder()
+        sb.append("SELECT * FROM [$tableName] ")
 
+        where?.let {
+            sb.append(" WHERE ")
+            it.forEach { condition ->
+                sb.append(condition)
+                if (it.last() != condition) sb.append(" AND ")
+            }
+        }
+        orderBy?.let { sb.append(" ORDER BY $it ") }
+        limit?.let { sb.append(" LIMIT $it ") }
+
+
+        return db.recordsFromRawQuery(sb.toString())
     }
 
 

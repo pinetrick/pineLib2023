@@ -32,7 +32,7 @@ class MainActivity : PineAppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-
+        //throw Exception("xxx")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

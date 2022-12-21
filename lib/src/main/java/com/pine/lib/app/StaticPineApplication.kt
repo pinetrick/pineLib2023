@@ -6,6 +6,7 @@ import com.pine.lib.debug.LibDb
 
 object StaticPineApplication {
     var application: Application? = null
+    var onAppCrashCallback = OnAppCrashCallback()
 
     fun onCreate(application: Application) {
         this.application = application
