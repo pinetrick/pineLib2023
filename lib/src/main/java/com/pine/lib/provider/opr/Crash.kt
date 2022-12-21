@@ -21,7 +21,7 @@ class Crash {
         val crash = libDb?.db?.model("crash")
 
         crash?.let {
-            val crashes = it.order("id desc").limit(10).select()
+            val crashes = it.order("id desc").limit(30).select()
             return gson().toJson(crashes)
         }
 
