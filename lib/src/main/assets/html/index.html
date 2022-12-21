@@ -13,7 +13,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 
@@ -74,26 +74,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <span class="badge badge-danger navbar-badge">3</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -109,7 +93,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -169,72 +152,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
-    </a>
+    <div class="sidebar mx-2">
+      <a href="/" class="brand-link">
+        <i class="nav-icon fa-solid fa-book-open"></i>
+        <span class="brand-text font-weight-light">Pine Lib</span>
+      </a>
+    </div>
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
-        </div>
-      </div>
-
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Starter Pages
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Active Page</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+            <a href="#" class="nav-link" ng-class="vm.getActive('db')" ng-click="vm.initPage('db')">
+              <i class="nav-icon fa fa-database"></i>
               <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
+                Database
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link" ng-class="vm.getActive('crash')" ng-click="vm.initPage('crash')">
+              <i class="nav-icon fa-solid fa-explosion"></i>
+              <p>
+                Crash Log
+              </p>
+            </a>
+          </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -242,8 +191,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.sidebar -->
   </aside>
 
+
   <!----------------------------------------- database ----------------------------------------------------------------->
-  
   <div ng-show="vm.page=='db'">
     <div class="content-wrapper">
       
@@ -251,7 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <section class="content">
         <div class="row">
           <div class="col-md-2">
-            <a href="#" ng-click="vm.dbRefreshAll()" class="btn btn-primary btn-block mb-3">Refresh</a>
+            <a href="#" ng-click="vm.dbRefreshAll()" class="btn btn-primary btn-block mb-3">Refresh Dbs</a>
 
 
             <div class="card" ng-repeat="db in vm.databases">
@@ -337,13 +286,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <tbody>
 
                       <tr>
-                        <td ng-repeat="header in vm.tableData.headers">
+                        <td ng-repeat="header in vm.tableData.headers" class="pl-0">
                           {{header.name}}
                         </td>
                       </tr>
 
                       <tr ng-repeat="(index, record) in vm.tableData.records">
-                        <td ng-repeat="(key, value) in record.values" class="p-0 dbColumnLenghtLimit">
+                        <td ng-repeat="(key, value) in record.values" class="py-0 px-1 dbColumnLenghtLimit">
                           <span ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
                           <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
                                  ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
@@ -407,6 +356,65 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
+  <!----------------------------------------- Crash ----------------------------------------------------------------->
+  <div ng-show="vm.page=='crash'">
+    <div class="content-wrapper">
+      
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-md-3">
+            <a href="#" ng-click="vm.crashRefresh()" class="btn btn-danger btn-block mb-3">Refresh Crash</a>
+
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Crashes</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                  <li class="nav-item active" ng-repeat="crash in vm.crashes.records">
+                    <a href="#" ng-click="vm.crashShow(crash)" class="nav-link">
+                      <i class="fa-solid fa-burst"></i> {{crash.values.details.substring(0, 40)}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+
+          </div>
+          <!-- /.col -->
+          <div class="col-md-9">
+            <div class="card card-primary card-outline">
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+
+                <div class="table-responsive mailbox-messages" ng-bind-html="vm.crash.values.details"></div>
+                <!-- /.mail-box-messages -->
+              </div>
+              <!-- /.card-body -->
+              
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+
+
 
 
 
@@ -437,6 +445,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-touch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-sanitize.min.js"></script>
 <!-- AdminLTE App -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <script src="main.js"></script>

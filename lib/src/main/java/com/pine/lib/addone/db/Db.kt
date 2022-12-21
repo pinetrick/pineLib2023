@@ -26,7 +26,7 @@ class Db(var dbName: String) {
     fun tables(): List<String> {
         if (!db.isOpen) return emptyList()
 
-        val c: Cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null)
+        val c: Cursor = rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null)
 
         val r: ArrayList<String> = ArrayList<String>()
 

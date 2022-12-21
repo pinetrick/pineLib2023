@@ -35,7 +35,7 @@ class WebDb {
     }
 
     fun select(route: List<String>): String {
-        val data = Db(route[2]).model(route[3]).select()
+        val data = Db(route[2]).model(route[3]).limit(100).order("id DESC").select()
         return gson().toJson(data)
     }
 

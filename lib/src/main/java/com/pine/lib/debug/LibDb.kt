@@ -1,9 +1,11 @@
 package com.pine.lib.debug
 
 import android.os.Build
+import com.pine.lib.addone.datetime.DateTime
 import com.pine.lib.addone.db.Db
 import com.pine.lib.addone.db.TableHeader
 import java.time.LocalDateTime
+import kotlin.system.exitProcess
 
 
 var libDb: LibDb? = null
@@ -21,6 +23,14 @@ class LibDb() {
                 add(TableHeader("create_time", "TEXT"))
             }
         }
+
+        db.model("crash").create {
+            it.apply {
+                add(TableHeader("id", "INTEGER", pk = 1))
+                add(TableHeader("details", "TEXT"))
+                add(TableHeader("create_time", "TEXT"))
+            }
+        }
         libDb = this
     }
 
@@ -31,12 +41,27 @@ class LibDb() {
                 callFromLibDb = true
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     db.model("sql_history").newRecord().put("sql", sql)
-                        .put("create_time", LocalDateTime.now().toString()).save()
+                        .put("create_time", DateTime.now.toString()).save()
                 }
-            }
-            finally {
+            } finally {
                 callFromLibDb = false
             }
         }
     }
+
+    fun recordCrash(thread: Thread, throwable: Throwable) {
+        val details = "Thread: ${thread.name}\n" +
+                "Exception: ${throwable.javaClass.name}\n" +
+                "Message: ${throwable.message}\n" +
+                "Stack trace:\n${throwable.stackTrace.joinToString("\n")}"
+
+        db.model("crash").newRecord()
+            .put("details", details)
+            .put("create_time", DateTime.now.toString())
+            .save()
+
+        e("Crash Application Will Exit!")
+        exitProcess(0)
+    }
+
 }
