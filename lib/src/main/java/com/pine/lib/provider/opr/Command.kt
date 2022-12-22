@@ -10,6 +10,6 @@ class Command : BaseOpr() {
 //            val method: Method = className.getMethod("onValueAppended", String::class.java)
 //            method.invoke("4")
         }
-        AppBroadcastController.send("lib_command")
+        AppBroadcastController.send("lib_command", requestData.args)
     }
 }
