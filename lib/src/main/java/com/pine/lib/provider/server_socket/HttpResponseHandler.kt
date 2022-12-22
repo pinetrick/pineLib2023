@@ -2,6 +2,7 @@ package com.pine.lib.provider.server_socket
 
 import com.pine.lib.debug.d
 import com.pine.lib.file.AssetsHelper
+import com.pine.lib.provider.opr.Command
 import com.pine.lib.provider.opr.Crash
 import com.pine.lib.provider.opr.Header
 import com.pine.lib.provider.opr.WebDb
@@ -54,5 +55,7 @@ class HttpResponseHandler {
         Header().run(requestData, responseData)
     }
 
-
+    fun command() {
+        Command().run(requestData, responseData)
+    }
 }
