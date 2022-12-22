@@ -4,7 +4,7 @@ import com.pine.lib.addone.app_broadcast.AppBroadcastController
 
 class Command : BaseOpr() {
     fun run() {
-        AppBroadcastController.send("lib_command", requestData.args)
+        AppBroadcastController.send("lib_command", responseData)
     }
 
 
