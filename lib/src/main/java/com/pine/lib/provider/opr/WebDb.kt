@@ -26,6 +26,20 @@ class WebDb : BaseOpr() {
             Db(requestData.urls[2]).model(requestData.urls[3]).limit(100).order("id DESC").select()
     }
 
+    fun structure() {
+        val tableCreateSql = Db(requestData.urls[2])
+            .model("sqlite_master")
+            .where("type", "table")
+            .where("tbl_name", requestData.urls[3])
+            .find()?.let {
+                it["sql"]
+            }
+
+
+
+        responseData.returnObj = tableCreateSql
+    }
+
     fun exec() {
         val sql = URLDecoder.decode(requestData.urls[3], "UTF-8")
         responseData.returnObj = Db(requestData.urls[2]).execSQL(sql)

@@ -75,8 +75,12 @@ class Record constructor(val dbName: String, val tableName: String?) {
         return Pair(sb.toString(), array.toArray())
     }
 
-    fun put(name: String, value: Any?): Record {
+    operator fun set(name: String, value: Any?): Record {
         values[name] = value
         return this
+    }
+
+    operator fun get(name: String): Any? {
+        return values[name]
     }
 }
