@@ -1,5 +1,6 @@
 package com.pine.lib.provider.opr
 
+import com.pine.lib.addone.db.CreateTable
 import com.pine.lib.addone.db.Db
 import java.net.URLDecoder
 
@@ -37,7 +38,7 @@ class WebDb : BaseOpr() {
 
 
 
-        responseData.returnObj = tableCreateSql
+        responseData.returnObj = CreateTable(tableCreateSql!! as String).structure
     }
 
     fun exec() {
