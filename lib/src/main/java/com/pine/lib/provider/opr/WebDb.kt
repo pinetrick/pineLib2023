@@ -38,7 +38,7 @@ class WebDb : BaseOpr() {
 
 
 
-        responseData.returnObj = CreateTable(tableCreateSql!! as String).structure
+        responseData.returnObj = CreateTable(tableCreateSql!! as String).toRecords(requestData.urls[2])
     }
 
     fun exec() {
