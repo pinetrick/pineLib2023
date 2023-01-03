@@ -1,6 +1,7 @@
 package com.pine.lib.provider.server_socket
 
 import com.pine.lib.debug.d
+import com.pine.lib.debug.e
 import com.pine.lib.file.AssetsHelper
 import com.pine.lib.provider.opr.Command
 import com.pine.lib.provider.opr.Crash
@@ -29,19 +30,39 @@ class HttpResponseHandler {
     private fun tryOpenFile() {
         val url = requestData.urls.joinToString("/")
         d("Open File: $url")
-        val file = AssetsHelper.readAsByteArray("html/$url")
 
-        if (file != null) {
-            responseData.contentByte = file
+        var file: ByteArray? = null
+
+        if (url.endsWith(".html", true) || url.endsWith(".css", true) || url.endsWith(
+                ".js",
+                true
+            )
+        ) {
+            var fileString = AssetsHelper.read("html/$url")
+            if (fileString != null) {
+                do {
+                    val replace = fileString!!.indexOf("{{html") //10
+                    if (replace == -1) break
+                    val end = fileString!!.indexOf("}}", replace) //20
+                    val fileName =
+                        fileString!!.substring(replace + 2, end).trim() //html/html/a.html
+                    val fileDetail = AssetsHelper.read(fileName).also { if (it == null) e("Cannot open file$fileName") }
+                        ?: break //...
+                    val needReplaceString =
+                        fileString!!.substring(replace, end + 2) //{{html/html/a.html}}
+                    fileString = fileString!!.replace(needReplaceString, fileDetail!!)
+                } while (true)
+                responseData.content = fileString
+            }
         } else {
-            responseData.content = "File Not Exit"
+            responseData.contentByte = AssetsHelper.readAsByteArray("html/$url").also {
+                if (it == null) {
+                    responseData.content = "File Not Exit"
+                }
+            }
         }
     }
 
-    fun index() {
-        val file = AssetsHelper.read("html/index.html")
-        file?.let { responseData.content = it }
-    }
 
     fun db() {
         WebDb().run(requestData, responseData)

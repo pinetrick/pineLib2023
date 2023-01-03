@@ -59,7 +59,7 @@ class RequestHandler(private val mContext: Context) {
 
             output = PrintStream(socket.getOutputStream())
             if (requestData.urls.size == 1 && requestData.urls[0].isEmpty()) {
-                requestData.urls = arrayListOf("index")
+                requestData.urls = arrayListOf("index.html")
             }
 
             responseData.request = requestData
