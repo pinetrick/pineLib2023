@@ -1,0 +1,50 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <div class="sidebar mx-2">
+        <a href="/" class="brand-link">
+            <i class="nav-icon fa-solid fa-book-open"></i>
+            <span class="brand-text font-weight-light">Pine Lib</span>
+        </a>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link" ng-class="vm.getActive('db')" ng-click="vm.initPage('db')">
+                        <i class="nav-icon fa fa-database"></i>
+                        <p>
+                            Database
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link" ng-class="vm.getActive('crash')" ng-click="vm.initPage('crash')">
+                        <i class="nav-icon fa-solid fa-explosion"></i>
+                        <p>
+                            Crash Log
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link" ng-class="vm.getActive('file')" ng-click="vm.initPage('file')">
+                        <i class="nav-icon fa-solid fa-folder-open"></i>
+                        <p>
+                            File Explorer
+                        </p>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

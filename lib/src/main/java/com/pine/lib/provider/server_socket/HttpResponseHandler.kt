@@ -3,10 +3,7 @@ package com.pine.lib.provider.server_socket
 import com.pine.lib.debug.d
 import com.pine.lib.debug.e
 import com.pine.lib.file.AssetsHelper
-import com.pine.lib.provider.opr.Command
-import com.pine.lib.provider.opr.Crash
-import com.pine.lib.provider.opr.Header
-import com.pine.lib.provider.opr.WebDb
+import com.pine.lib.provider.opr.*
 
 class HttpResponseHandler {
 
@@ -72,6 +69,10 @@ class HttpResponseHandler {
         Crash().run(requestData, responseData)
     }
 
+    fun file() {
+        Files().run(requestData, responseData)
+    }
+
     fun header() {
         Header().run(requestData, responseData)
     }
@@ -79,4 +80,6 @@ class HttpResponseHandler {
     fun command() {
         Command().run(requestData, responseData)
     }
+
+
 }

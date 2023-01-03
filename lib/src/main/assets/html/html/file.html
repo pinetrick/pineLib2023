@@ -1,0 +1,71 @@
+<div ng-show="vm.page=='file'">
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="#" ng-click="vm.fileRefreshBaseTree()" class="btn btn-success btn-block mb-3">Refresh Files</a>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{vm.filesTree.fullDir}}</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item active" ng-repeat="file in vm.filesTree.subFiles">
+
+
+                                    <a href="#" ng-click="vm.fileLoadDir(file)" ng-show="file.isDir" class="nav-link">
+                                        <i class="fa-solid fa-folder"></i> {{file.name}}
+                                    </a>
+                                    <a href="#" ng-click="vm.fileReadFile(file)" ng-show="!file.isDir" class="nav-link">
+                                        <i class="fa-solid fa-file"></i> {{file.name}}
+                                    </a>
+
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+                <div class="col-md-9">
+                    <div class="card card-primary card-outline h-100">
+                        <!-- /.card-header -->
+                        <div class="card-header">
+                            <h3 class="card-title">{{vm.fileOpenedFile}}</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <textarea class="fullTextArea" ng-model="vm.fileOpenedContent"></textarea>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
