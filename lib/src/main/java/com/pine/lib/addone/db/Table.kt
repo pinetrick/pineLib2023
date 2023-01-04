@@ -56,7 +56,7 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
     }
 
     fun where(key: String, value: String): Table {
-        return where("$key = $value")
+        return where("[$key] = '$value'")
     }
 
     fun where(condition: String): Table {
@@ -87,6 +87,13 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
 
 
         return db.recordsFromRawQuery(sb.toString())
+    }
+
+    fun find(): Record? {
+        val results = limit(1).select()
+        if (results.records.size == 0) return null
+
+        return results.records[0]
     }
 
 

@@ -4,7 +4,6 @@ import android.os.Build
 import com.pine.lib.addone.datetime.DateTime
 import com.pine.lib.addone.db.Db
 import com.pine.lib.addone.db.TableHeader
-import java.time.LocalDateTime
 import kotlin.system.exitProcess
 
 
@@ -40,8 +39,8 @@ class LibDb() {
             try {
                 callFromLibDb = true
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    db.model("sql_history").newRecord().put("sql", sql)
-                        .put("create_time", DateTime.now.toString()).save()
+                    db.model("sql_history").newRecord().set("sql", sql)
+                        .set("create_time", DateTime.now.toString()).save()
                 }
             } finally {
                 callFromLibDb = false
@@ -56,8 +55,8 @@ class LibDb() {
                 "Stack trace:\n${throwable.stackTrace.joinToString("\n")}"
 
         db.model("crash").newRecord()
-            .put("details", details)
-            .put("create_time", DateTime.now.toString())
+            .set("details", details)
+            .set("create_time", DateTime.now.toString())
             .save()
 
         e("Crash Application Will Exit!")

@@ -135,19 +135,19 @@ class DbChooseActivity : PineAppCompatActivity() {
         }
 
         var record = table.newRecord()
-            .put("colume1", "Unknown Value")
-            .put("colume2", "Unknown Value")
-            .put("colume3", "Unknown Value")
-            .put("colume4", null)
-            .put("colume5", "Unknown Value")
-            .put("colume6", "Unknown Value")
-            .put("colume7", "Unknown Value")
-            .put("colume8", "Unknown Value")
-            .put("colume9", "Unknown Value")
+            .set("colume1", "Unknown Value")
+            .set("colume2", "Unknown Value")
+            .set("colume3", "Unknown Value")
+            .set("colume4", null)
+            .set("colume5", "Unknown Value")
+            .set("colume6", "Unknown Value")
+            .set("colume7", "Unknown Value")
+            .set("colume8", "Unknown Value")
+            .set("colume9", "Unknown Value")
             .save()
 
         record = table.select().records[0]
-        record.put("colume1", "xx")
+        record.set("colume1", "xx")
         record.save()
 
         sqlEditor.setText(db.lastSql)

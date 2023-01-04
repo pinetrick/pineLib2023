@@ -1,5 +1,6 @@
 package com.pine.lib.provider.opr
 
+import com.pine.lib.addone.db.CreateTable
 import com.pine.lib.addone.db.Db
 import java.net.URLDecoder
 
@@ -24,6 +25,20 @@ class WebDb : BaseOpr() {
     fun select() {
         responseData.returnObj =
             Db(requestData.urls[2]).model(requestData.urls[3]).limit(100).order("id DESC").select()
+    }
+
+    fun structure() {
+        val tableCreateSql = Db(requestData.urls[2])
+            .model("sqlite_master")
+            .where("type", "table")
+            .where("tbl_name", requestData.urls[3])
+            .find()?.let {
+                it["sql"]
+            }
+
+
+
+        responseData.returnObj = CreateTable(tableCreateSql!! as String).toRecords(requestData.urls[2])
     }
 
     fun exec() {

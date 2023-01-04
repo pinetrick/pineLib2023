@@ -1,0 +1,56 @@
+<div ng-show="vm.page=='crash'">
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="#" ng-click="vm.crashRefresh()" class="btn btn-danger btn-block mb-3">Refresh Crash</a>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Crashes</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item active" ng-repeat="crash in vm.crashes.records">
+                                    <a href="#" ng-click="vm.crashShow(crash)" class="nav-link">
+                                        <i class="fa-solid fa-burst"></i> {{crash.values.details.substring(0, 40)}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+                <div class="col-md-9">
+                    <div class="card card-primary card-outline">
+                        <!-- /.card-header -->
+                        <div class="card-body p-0">
+
+                            <div class="table-responsive mailbox-messages" ng-bind-html="vm.crash.values.details"></div>
+                            <!-- /.mail-box-messages -->
+                        </div>
+                        <!-- /.card-body -->
+
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
