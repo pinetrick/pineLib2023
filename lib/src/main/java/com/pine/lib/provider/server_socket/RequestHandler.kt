@@ -60,7 +60,7 @@ class RequestHandler(private val mContext: Context) {
                 val postData = String(data)
 
                 Regex("([^&=?]+)=([^&=]+)").findAll(postData).forEach {
-                     requestData.bodyArgs[it.groupValues[1]] = URLDecoder.decode(it.groupValues[2])
+                     requestData.bodyArgs[it.groupValues[1]] = URLDecoder.decode(it.groupValues[2], Charsets.UTF_8.name())
                 }
             }
 

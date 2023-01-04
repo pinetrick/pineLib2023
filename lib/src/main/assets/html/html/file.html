@@ -13,24 +13,24 @@
                             <h3 class="card-title">{{vm.filesTree.fullDir}}</h3>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
+                                <button type="button" class="btn btn-tool" ng-click="vm.fileLoadDir(vm.filesTree)">
+                                    <i class="fa-solid fa-arrows-rotate"></i>
                                 </button>
                             </div>
                         </div>
 
                         <div class="card-body p-0">
                             <ul class="nav nav-pills flex-column">
-                                <li class="nav-item active" ng-repeat="file in vm.filesTree.subFiles">
-
-
-                                    <a href="#" ng-click="vm.fileLoadDir(file)" ng-show="file.isDir" class="nav-link">
+                                <li class="nav-item active row" ng-repeat="file in vm.filesTree.subFiles">
+                                    <a href="#" ng-click="vm.fileLoadDir(file)" ng-show="file.isDir" class="nav-link col singleLine">
                                         <i class="fa-solid fa-folder"></i> {{file.name}}
                                     </a>
-                                    <a href="#" ng-click="vm.fileReadFile(file)" ng-show="!file.isDir" class="nav-link">
+                                    <a href="#" ng-click="vm.fileReadFile(file)" ng-show="!file.isDir" class="nav-link col singleLine">
                                         <i class="fa-solid fa-file"></i> {{file.name}}
                                     </a>
-
+                                    <a href="#" ng-click="vm.fileDelete(file)" class="nav-link">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </div>

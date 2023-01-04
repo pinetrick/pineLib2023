@@ -21,7 +21,7 @@
                         <div class="card-body p-0">
                             <ul class="nav nav-pills flex-column">
                                 <li class="nav-item active row" ng-repeat="table in db.tables">
-                                    <a href="#" ng-click="vm.dbLoadTableData(db.dbName, table)" class="nav-link col">
+                                    <a href="#" ng-click="vm.dbLoadTableData(db.dbName, table)" class="nav-link col singleLine">
                                         <i class="fas fa-table"></i> {{table}}
                                     </a>
                                     <a href="#" ng-click="vm.dbTabelStructure(db.dbName, table)" class="nav-link">
