@@ -43,6 +43,17 @@ class Files : BaseOpr() {
         responseData.returnObj = FileContent(name = file, content = content)
     }
 
+    fun saveFile() {
+        val file = requestData.args["file"]!!
+
+        val content = requestData.bodyArgs["content"]
+
+        content?.let { File(file).writeText(it) }
+
+
+        responseData.content = content
+    }
+
 }
 
 data class Dir(

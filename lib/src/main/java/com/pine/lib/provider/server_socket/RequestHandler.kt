@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import java.io.*
 import java.net.Socket
+import java.net.URLDecoder
 import java.util.*
 
 
@@ -35,9 +36,14 @@ class RequestHandler(private val mContext: Context) {
 
             var line: String?
             var lines: ArrayList<String> = ArrayList()
-            while (reader.readLine().also { line = it } != null && line!!.length !== 0) {
+            do {
+                line = reader.readLine()
+                if (line == null) break
+                if (line.length === 0) break
                 lines.add(line!!)
-            }
+
+            } while (true)
+
             var allData = lines.joinToString("\n").trim()
 
             val requestMethod = Regex("^(GET|POST|PUT)").find(allData)?.value
@@ -46,9 +52,18 @@ class RequestHandler(private val mContext: Context) {
                 .map { it.groupValues[1] to it.groupValues[2] }.toList()
             val contentLength =
                 Regex("Content-Length: (\\d+)").find(allData)?.groupValues?.get(1)?.toInt() ?: 0
-            val body = lines.takeLast(contentLength).joinToString("\n")
-            val bodyParams = Regex("([^&=?]+)=([^&=]+)").findAll(body)
-                .map { it.groupValues[1] to it.groupValues[2] }.toList()
+
+            if (contentLength > 0) {
+                // 解析 POST 数据
+                val data = CharArray(contentLength)
+                reader.read(data, 0, contentLength)
+                val postData = String(data)
+
+                Regex("([^&=?]+)=([^&=]+)").findAll(postData).forEach {
+                     requestData.bodyArgs[it.groupValues[1]] = URLDecoder.decode(it.groupValues[2])
+                }
+            }
+
 
             requestData.method = requestMethod!!
             requestData.urls = path!!.removePrefix("/").split("/")
@@ -61,6 +76,8 @@ class RequestHandler(private val mContext: Context) {
             if (requestData.urls.size == 1 && requestData.urls[0].isEmpty()) {
                 requestData.urls = arrayListOf("index.html")
             }
+
+
 
             responseData.request = requestData
             responseHandler.getResponse(requestData, responseData)
