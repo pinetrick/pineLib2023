@@ -9,11 +9,16 @@
 
 
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">{{vm.filesTree.fullDir}}</h3>
+                        <div class="card-header row">
+                            <h3 class="card-title col singleLine font-size-1rem">
+                                <span ng-repeat="lay in vm.fileUpLayers">
+                                    /<a href="#" ng-click="vm.fileLoadDir(lay.value)">{{lay.key}}</a>
+                                </span>
+
+                            </h3>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" ng-click="vm.fileLoadDir(vm.filesTree)">
+                                <button type="button" class="btn btn-tool" ng-click="vm.fileLoadDir(vm.filesTree.fullDir)">
                                     <i class="fa-solid fa-arrows-rotate"></i>
                                 </button>
                             </div>
@@ -22,7 +27,7 @@
                         <div class="card-body p-0">
                             <ul class="nav nav-pills flex-column">
                                 <li class="nav-item active row" ng-repeat="file in vm.filesTree.subFiles">
-                                    <a href="#" ng-click="vm.fileLoadDir(file)" ng-show="file.isDir" class="nav-link col singleLine">
+                                    <a href="#" ng-click="vm.fileLoadDir(file.fullDir)" ng-show="file.isDir" class="nav-link col singleLine">
                                         <i class="fa-solid fa-folder"></i> {{file.name}}
                                     </a>
                                     <a href="#" ng-click="vm.fileReadFile(file)" ng-show="!file.isDir" class="nav-link col singleLine">
