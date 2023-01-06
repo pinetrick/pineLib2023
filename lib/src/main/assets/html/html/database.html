@@ -101,7 +101,7 @@
 
                                     <tr ng-repeat="(index, record) in vm.tableData.records">
                                         <td ng-repeat="(key, value) in record.values" class="py-0 px-1 dbColumnLenghtLimit">
-                                            <span ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</span>
+                                            <div ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</div>
                                             <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
                                                    ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
                                     </tr>
