@@ -25,3 +25,5 @@
 }
 .font-size-1rem{  font-size: 1rem;}
 .font-size-09rem{  font-size: 0.9rem;}
+
+.fill-parent{ position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
