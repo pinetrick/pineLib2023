@@ -3,7 +3,7 @@ package com.pine.lib.addone.db
 class Table constructor(val dbName: String, val tableName: String? = null) {
     private val db: Db = Db.getDb(dbName)
 
-    private val pk: String? by lazy {
+    val pk: String? by lazy {
         headers.firstOrNull { it.pk == 1 }?.name
     }
 
@@ -22,7 +22,7 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
             tableHeader.name = c.values["name"] as String
             tableHeader.type = c.values["type"] as String
             tableHeader.notnull = c.values["notnull"] as Int
-            tableHeader.dflt_value = c.values["dflt_value"] as String
+            tableHeader.dflt_value = c.values["dflt_value"] as String?
             tableHeader.pk = c.values["pk"] as Int
 
             r.add(tableHeader)

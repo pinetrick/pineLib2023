@@ -24,7 +24,9 @@ class WebDb : BaseOpr() {
 
     fun select() {
         responseData.returnObj =
-            Db(requestData.urls[2]).model(requestData.urls[3]).limit(100).order("id DESC").select()
+            Db(requestData.urls[2]).model(requestData.urls[3]).limit(100).run {
+                order("$pk DESC")
+            }.select()
     }
 
     fun structure() {
