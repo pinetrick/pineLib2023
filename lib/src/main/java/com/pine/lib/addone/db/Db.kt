@@ -9,11 +9,13 @@ import com.pine.lib.debug.libDb
 
 class Db(var dbName: String) {
     var lastSql: String = ""
-    private var db: SQLiteDatabase = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
     private val tablesMap: HashMap<String, Table> = HashMap()
 
-    fun isOpen(): Boolean {
-        return db.isOpen
+    private fun<T> useDb(dbCalls: (SQLiteDatabase) -> T): T{
+        val db = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
+        db.use { db ->
+            return dbCalls(db)
+        }
     }
 
     fun model(tableName: String): Table {
@@ -24,49 +26,51 @@ class Db(var dbName: String) {
     }
 
     fun tables(): List<String> {
-        if (!db.isOpen) return emptyList()
+        return useDb { db ->
+            val c: Cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null)
 
-        val c: Cursor = rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null)
+            val r: ArrayList<String> = ArrayList<String>()
 
-        val r: ArrayList<String> = ArrayList<String>()
-
-        if (c.moveToFirst()) {
-            while (!c.isAfterLast) {
-                r.add(c.getString(0))
-                c.moveToNext()
+            if (c.moveToFirst()) {
+                while (!c.isAfterLast) {
+                    r.add(c.getString(0))
+                    c.moveToNext()
+                }
             }
-        }
-        c.close()
+            c.close()
 
-        return r.reversed()
+            r.reversed()
+        }
+
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun rawQuery(sql: String, selectionArgs: Array<String>? = null): Cursor {
+    private fun rawQuery(sql: String, selectionArgs: Array<String>? = null): Cursor {
         logSql(sql, selectionArgs as Array<Any?>?)
-        return db.rawQuery(sql, selectionArgs)
+        return useDb { it.rawQuery(sql, selectionArgs) }
     }
 
     fun recordsFromRawQuery(sql: String, selectionArgs: Array<String>? = null): Records {
+        return useDb { db->
+            val records = Records()
+            val c = db.rawQuery(sql, selectionArgs)
+            c.use { c ->
+                val singleTableName = getSingleTableName(sql)
+                val pk = getPrimaryKey(sql)
 
-        val c = rawQuery(sql, selectionArgs)
-        val singleTableName = getSingleTableName(sql)
-        val pk = getPrimaryKey(sql)
-
-        val records = Records()
-        records.sql = lastSql
-        if (c.moveToFirst()) {
-            while (!c.isAfterLast) {
-                if (records.dbName.isEmpty()) {
-                    records.initHeadersBaseARecord(dbName, singleTableName, c)
+                records.sql = lastSql
+                if (c.moveToFirst()) {
+                    while (!c.isAfterLast) {
+                        if (records.dbName.isEmpty()) {
+                            records.initHeadersBaseARecord(dbName, singleTableName, c)
+                        }
+                        records.anylizeLine(c, pk)
+                        c.moveToNext()
+                    }
                 }
-                records.anylizeLine(c, pk)
-                c.moveToNext()
             }
+            records
         }
-        c.close()
-        return records
-
     }
 
     fun getSingleTableName(sql: String): String? {
@@ -92,24 +96,26 @@ class Db(var dbName: String) {
         }
 
         // 获取表的信息
-        val cursor = db.rawQuery("PRAGMA table_info($tableName)", null)
-        val pkColumnIndex = cursor.getColumnIndexOrThrow("pk")
-        var primaryKey: String? = null
-        while (cursor.moveToNext()) {
-            if (cursor.getInt(pkColumnIndex) == 1) {
-                // 这一行对应的字段是主键
-                val nameColumnIndex = cursor.getColumnIndexOrThrow("name")
-                primaryKey = cursor.getString(nameColumnIndex)
-                break
+        return useDb { db ->
+            val cursor = db.rawQuery("PRAGMA table_info($tableName)", null)
+            val pkColumnIndex = cursor.getColumnIndexOrThrow("pk")
+            var primaryKey: String? = null
+            while (cursor.moveToNext()) {
+                if (cursor.getInt(pkColumnIndex) == 1) {
+                    // 这一行对应的字段是主键
+                    val nameColumnIndex = cursor.getColumnIndexOrThrow("name")
+                    primaryKey = cursor.getString(nameColumnIndex)
+                    break
+                }
             }
+            cursor.close()
+            primaryKey
         }
-        cursor.close()
-        return primaryKey
     }
 
     fun execSQL(sql: String, bindArgs: Array<Any?> = emptyArray()) {
         logSql(sql, bindArgs)
-        return db.execSQL(sql, bindArgs)
+        return useDb{ it.execSQL(sql, bindArgs) }
     }
 
     private fun logSql(sql: String, bindArgs: Array<Any?>? = null) {
@@ -136,5 +142,7 @@ class Db(var dbName: String) {
             }
             return dbs[dbName]!!
         }
+
     }
+
 }

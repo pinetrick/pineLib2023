@@ -10,8 +10,6 @@ class Record constructor(val dbName: String, val tableName: String?) {
         val db = Db.getDb(dbName)
         val table = db.model(tableName!!)
 
-        if (!db.isOpen()) return this
-
         val sql: Pair<String, Array<Any?>> = if (isNewRecord) {
             getInsertSql()
         } else {

@@ -1,12 +1,9 @@
 package com.pine.lib.addone.db
 
-import android.database.Cursor
-import androidx.core.database.getStringOrNull
-
 class Table constructor(val dbName: String, val tableName: String? = null) {
     private val db: Db = Db.getDb(dbName)
 
-    private val pk: String? by lazy {
+    val pk: String? by lazy {
         headers.firstOrNull { it.pk == 1 }?.name
     }
 
@@ -15,30 +12,23 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
     private var where: ArrayList<String>? = null
 
     val headers: ArrayList<TableHeader> by lazy {
-        if (!db.isOpen()) {
-            ArrayList()
-        } else {
-            val c: Cursor = db.rawQuery("pragma table_info ('$tableName');")
+        val records: Records = db.recordsFromRawQuery("pragma table_info ('$tableName');")
 
-            val r: ArrayList<TableHeader> = ArrayList<TableHeader>()
+        val r: ArrayList<TableHeader> = ArrayList<TableHeader>()
 
-            if (c.moveToFirst()) {
-                while (!c.isAfterLast) {
-                    val tableHeader = TableHeader()
-                    tableHeader.cid = c.getInt(0)
-                    tableHeader.name = c.getString(1)
-                    tableHeader.type = c.getString(2)
-                    tableHeader.notnull = c.getInt(3)
-                    tableHeader.dflt_value = c.getStringOrNull(4)
-                    tableHeader.pk = c.getInt(5)
+        records.records.forEach { c ->
+            val tableHeader = TableHeader()
+            tableHeader.cid = c.values["cid"] as Int
+            tableHeader.name = c.values["name"] as String
+            tableHeader.type = c.values["type"] as String
+            tableHeader.notnull = c.values["notnull"] as Int
+            tableHeader.dflt_value = c.values["dflt_value"] as String?
+            tableHeader.pk = c.values["pk"] as Int
 
-                    r.add(tableHeader)
-                    c.moveToNext()
-                }
-            }
-            c.close()
-            r
+            r.add(tableHeader)
         }
+
+        r
     }
 
     fun newRecord(): Record {
@@ -70,8 +60,6 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
     }
 
     fun select(): Records {
-        if (!db.isOpen()) return Records()
-
         val sb = StringBuilder()
         sb.append("SELECT * FROM [$tableName] ")
 
