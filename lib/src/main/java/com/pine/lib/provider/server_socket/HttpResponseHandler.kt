@@ -21,14 +21,13 @@ class HttpResponseHandler {
         } catch (e: Exception) {
             tryOpenFile()
         }
+
     }
 
 
     private fun tryOpenFile() {
         val url = requestData.urls.joinToString("/")
         d("Open File: $url")
-
-        var file: ByteArray? = null
 
         if (url.endsWith(".html", true) || url.endsWith(".css", true) || url.endsWith(
                 ".js",
@@ -40,14 +39,15 @@ class HttpResponseHandler {
                 do {
                     val replace = fileString!!.indexOf("{{html") //10
                     if (replace == -1) break
-                    val end = fileString!!.indexOf("}}", replace) //20
+                    val end = fileString.indexOf("}}", replace) //20
                     val fileName =
-                        fileString!!.substring(replace + 2, end).trim() //html/html/a.html
-                    val fileDetail = AssetsHelper.read(fileName).also { if (it == null) e("Cannot open file$fileName") }
+                        fileString.substring(replace + 2, end).trim() //html/html/a.html
+                    val fileDetail = AssetsHelper.read(fileName)
+                        .also { if (it == null) e("Cannot open file$fileName") }
                         ?: break //...
                     val needReplaceString =
-                        fileString!!.substring(replace, end + 2) //{{html/html/a.html}}
-                    fileString = fileString!!.replace(needReplaceString, fileDetail!!)
+                        fileString.substring(replace, end + 2) //{{html/html/a.html}}
+                    fileString = fileString.replace(needReplaceString, fileDetail)
                 } while (true)
                 responseData.content = fileString
             }
