@@ -87,13 +87,13 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
 
     fun create(callback: (ArrayList<TableHeader>) -> ArrayList<TableHeader>) {
         val sb = StringBuilder()
-        sb.append("create table if not exists ")
-        sb.append(tableName)
+        sb.append("CREATE TABLE IF NOT EXISTS ")
+        sb.append("[$tableName]")
         sb.append(" (")
 
         val list = callback(ArrayList<TableHeader>())
         list.forEach {
-            sb.append(it.name + " ")
+            sb.append("[" + it.name + "] ")
             sb.append(it.type + " ")
             if (it.pk == 1) {
                 sb.append(" PRIMARY KEY ")
