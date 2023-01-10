@@ -82,4 +82,8 @@ class HttpResponseHandler {
     }
 
 
+    fun sql() {
+        Sql().run(requestData, responseData)
+    }
+
 }

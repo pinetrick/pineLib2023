@@ -54,11 +54,13 @@ class Db(var dbName: String) {
         return useDb { db->
             val records = Records()
             val c = db.rawQuery(sql, selectionArgs)
+            logSql(sql, selectionArgs as Array<Any?>?)
             c.use { c ->
+                records.sql = lastSql
+
                 val singleTableName = getSingleTableName(sql)
                 val pk = getPrimaryKey(sql)
 
-                records.sql = lastSql
                 if (c.moveToFirst()) {
                     while (!c.isAfterLast) {
                         if (records.dbName.isEmpty()) {
@@ -123,8 +125,8 @@ class Db(var dbName: String) {
         bindArgs?.forEach {
             _sql = _sql.replaceFirst("?", "'$it'")
         }
-        if (libDb?.callFromLibDb == false) lastSql = _sql
-        libDb?.recordSql(_sql)
+        lastSql = _sql
+        libDb?.recordSql(dbName, _sql)
     }
 
     companion object {

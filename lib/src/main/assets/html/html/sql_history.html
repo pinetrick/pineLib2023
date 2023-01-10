@@ -1,0 +1,32 @@
+<div ng-show="vm.page=='sql_history'">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" ng-click="vm.sqlRefresh()" class="btn btn-warning btn-block mb-3">Refresh SQL</a>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">SQLS</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item active" ng-repeat="sql in vm.sqlLists">
+                                    <a href="#" ng-click="vm.sqlRun(sql)" class="nav-link row">
+
+                                        <i class="fa-solid fa-burst"></i>
+                                        <span class="col">{{sql.time}}</span>
+                                        <span class="col">{{sql.db}}</span>
+                                        <span class="col">{{sql.sql}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

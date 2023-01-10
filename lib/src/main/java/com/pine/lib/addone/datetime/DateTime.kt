@@ -94,8 +94,15 @@ class DateTime {
         return this
     }
 
-    override fun toString(): String {
-        return "$year-$month-$day $hour:$minute:$second"
+    fun ToString(format: String = "YYYY-MM-DD HH:ii:ss"): String {
+        return format
+            .replace("YYYY", year.toString())
+            .replace("MM", month.toString().padStart(2, '0'))
+            .replace("DD", day.toString().padStart(2, '0'))
+            .replace("HH", hour.toString().padStart(2, '0'))
+            .replace("ii", minute.toString().padStart(2, '0'))
+            .replace("ss", second.toString().padStart(2, '0'))
+
     }
 
     companion object {
