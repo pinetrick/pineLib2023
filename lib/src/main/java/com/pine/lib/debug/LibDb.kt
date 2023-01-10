@@ -31,7 +31,7 @@ class LibDb() {
     fun recordSql(db: String, sql: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val filename = c().filesDir.toString() +  "/sql_history.txt"
-            val exist = PineFileReader.read(filename)
+            val exist = PineFileReader.read(filename) ?: ""
             val writeSql = "||NEW_SQL||" + DateTime.now.ToString() + "||" + db + "||" + sql + "\r\n"
             PineFileWriter.writeToFile(filename , writeSql + exist)
         }

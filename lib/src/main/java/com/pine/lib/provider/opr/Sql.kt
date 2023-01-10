@@ -9,7 +9,7 @@ class Sql : BaseOpr() {
         val filename = c().filesDir.toString() +  "/sql_history.txt"
         val r: ArrayList<SqlBean> = ArrayList()
 
-        val sqls = PineFileReader.read(filename).split("||NEW_SQL||")
+        val sqls = (PineFileReader.read(filename) ?: "").split("||NEW_SQL||")
         sqls.forEach {
             try{
                 val time = it.substring(0, 19)
