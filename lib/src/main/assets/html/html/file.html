@@ -47,13 +47,16 @@
                 <div class="col-md-9">
                     <div class="card card-primary card-outline h-100">
                         <!-- /.card-header -->
-                        <div class="card-header">
+                        <div class="card-header p-0">
                             <!--h3 class="card-title">
                                 {{vm.fileOpened[vm.fileOpenedId].name}}
                             </h3-->
                             <ul class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item" ng-repeat="(id, file) in vm.fileOpened">
-                                    <a class="nav-link" ng-click="vm.fileOpenedId=id" ng-class='vm.fileTagActiveClass(id)'>
+                                    <a class="nav-link"
+                                       ng-click="vm.fileOpenedId=id"
+                                       ng-dblClick="vm.fileClose(id)"
+                                       ng-class='vm.fileTagActiveClass(id)'>
                                         {{ vm.fileGetFileNameOrPath(file) }}
                                     </a>
                                 </li>
