@@ -17,7 +17,7 @@ data class ResponseData(
 
         // Send out the content.
         output.writeln("HTTP/1.0 200 OK")
-//        output.writeln("Content-Type: " + getContentType())
+        output.writeln("Content-Type: " + getContentType())
         output.writeln("Content-Length: " + responseByteArray!!.size)
         output.writeln()
         output.write(responseByteArray)
