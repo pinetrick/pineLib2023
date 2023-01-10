@@ -48,16 +48,22 @@
                     <div class="card card-primary card-outline h-100">
                         <!-- /.card-header -->
                         <div class="card-header">
-                            <h3 class="card-title">{{vm.fileOpenedFile}}</h3>
-
-                            <div class="card-tools">
+                            <!--h3 class="card-title">
+                                {{vm.fileOpened[vm.fileOpenedId].name}}
+                            </h3-->
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item" ng-repeat="(id, file) in vm.fileOpened">
+                                    <a class="nav-link" data-toggle="tab" ng-click="vm.fileOpenedId=id">{{file.name}}</a>
+                                </li>
+                            </ul>
+                            <!--div class="card-tools">
                                 <button type="button" class="btn btn-tool" ng-click="vm.fileSave()">
                                     <i class="fa-solid fa-floppy-disk"></i>
                                 </button>
-                            </div>
+                            </div-->
                         </div>
                         <div class="card-body p-0">
-                            <textarea class="fullTextArea" ng-model="vm.fileOpenedContent"></textarea>
+                            <textarea class="fullTextArea" ng-model="vm.fileOpened[vm.fileOpenedId].content"></textarea>
 
                         </div>
                         <!-- /.card-body -->
