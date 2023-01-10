@@ -48,6 +48,20 @@ class Files : BaseOpr() {
         responseData.returnObj = FileContent(name = file, content = content)
     }
 
+    fun renameFile() {
+        RequirePermission.require(PermissionList.WRITE_EXTERNAL_STORAGE)
+
+        val file = requestData.args["file"]!!
+        val newName = requestData.args["newName"]!!
+
+        val oldFile = File(file)
+        val newFile = File(oldFile.parent + "/" + newName)
+        oldFile.renameTo(newFile)
+
+
+        responseData.content = "Saved"
+    }
+
     fun saveFile() {
         RequirePermission.require(PermissionList.WRITE_EXTERNAL_STORAGE)
 
