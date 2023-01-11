@@ -12,7 +12,6 @@
                         <div class="card-header row">
                             <h3 class="card-title col singleLine font-size-09rem">
                                 <span ng-repeat="lay in vm.fileUpLayers"><a href="#" ng-click="vm.fileLoadDir(lay.value)">{{lay.key}}</a>/</span>
-
                             </h3>
 
                             <div class="card-tools">
@@ -25,15 +24,30 @@
                         <div class="card-body p-0">
                             <ul class="nav nav-pills flex-column">
                                 <li class="nav-item active row" ng-repeat="file in vm.filesTree.subFiles">
-                                    <a href="#" ng-click="vm.fileLoadDir(file.fullDir)" ng-show="file.isDir" class="nav-link col singleLine">
-                                        <i class="fa-solid fa-folder"></i> {{file.name}}
+                                    <a href="#"
+                                            ng-click="vm.fileLoadDir(file.fullDir)"
+                                            ng-show="file.isDir"
+                                            class="nav-link col singleLine">
+                                        <i class="fa-solid fa-folder"></i>
+                                        <span ng-show="file.renaming!=true">{{file.name}}</span>
                                     </a>
-                                    <a href="#" ng-click="vm.fileReadFile(file)" ng-show="!file.isDir" class="nav-link col singleLine">
-                                        <i class="fa-solid fa-file"></i> {{file.name}}
+                                    <a href="#"
+                                            ng-click="vm.fileReadFile(file)"
+                                            ng-show="!file.isDir"
+                                            class="nav-link col singleLine">
+                                        <i class="fa-solid fa-file"></i>
+                                        <span ng-show="file.renaming!=true">{{file.name}}</span>
+                                    </a>
+                                    <input type="text" ng-model="file.name" ng-blur="vm.fileRename(file)"
+                                           class="fileInputRename nav-link col" ng-show="file.renaming==true"/>
+
+                                    <a href="#" ng-click="file.renaming=true" class="nav-link">
+                                        <i class="fa-solid fa-file-signature"></i>
                                     </a>
                                     <a href="#" ng-click="vm.fileDelete(file)" class="nav-link">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
+
                                 </li>
                             </ul>
                         </div>
@@ -47,17 +61,28 @@
                 <div class="col-md-9">
                     <div class="card card-primary card-outline h-100">
                         <!-- /.card-header -->
-                        <div class="card-header">
-                            <h3 class="card-title">{{vm.fileOpenedFile}}</h3>
-
-                            <div class="card-tools">
+                        <div class="card-header p-0">
+                            <!--h3 class="card-title">
+                                {{vm.fileOpened[vm.fileOpenedId].name}}
+                            </h3-->
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item" ng-repeat="(id, file) in vm.fileOpened">
+                                    <a class="nav-link"
+                                       ng-click="vm.fileOpenedId=id"
+                                       ng-dblClick="vm.fileClose(id)"
+                                       ng-class='vm.fileTagActiveClass(id)'>
+                                        {{ vm.fileGetFileNameOrPath(file) }}
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--div class="card-tools">
                                 <button type="button" class="btn btn-tool" ng-click="vm.fileSave()">
                                     <i class="fa-solid fa-floppy-disk"></i>
                                 </button>
-                            </div>
+                            </div-->
                         </div>
                         <div class="card-body p-0">
-                            <textarea class="fullTextArea" ng-model="vm.fileOpenedContent"></textarea>
+                            <textarea class="fullTextArea" ng-model="vm.fileOpened[vm.fileOpenedId].content"></textarea>
 
                         </div>
                         <!-- /.card-body -->

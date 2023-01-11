@@ -1,7 +1,9 @@
 package com.pine.lib.provider.server_socket
 
 import android.text.TextUtils
+import com.pine.lib.addone.base_class_ext.writeln
 import com.pine.lib.app.gson
+import java.io.OutputStream
 import java.io.PrintStream
 
 data class ResponseData(
@@ -10,15 +12,16 @@ data class ResponseData(
     var contentByte: ByteArray? = null,
     var returnObj: Any? = null,
 ) {
-    fun writeResponse(output: PrintStream) {
+    fun writeResponse(output: OutputStream) {
         val responseByteArray = content?.toByteArray() ?: contentByte ?: gson().toJson(returnObj).toByteArray()
 
         // Send out the content.
-        output.println("HTTP/1.0 200 OK")
-        output.println("Content-Type: " + getContentType())
-        output.println("Content-Length: " + responseByteArray!!.size)
-        output.println()
+        output.writeln("HTTP/1.0 200 OK")
+        output.writeln("Content-Type: " + getContentType())
+        output.writeln("Content-Length: " + responseByteArray!!.size)
+        output.writeln()
         output.write(responseByteArray)
+        output.writeln()
         output.flush()
     }
 
