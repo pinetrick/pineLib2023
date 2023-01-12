@@ -1,8 +1,26 @@
 package com.pine.lib.addone.db
 
 class CreateTable {
-    var structure: List<Column>
+    var structure: List<TableHeader>
     var sql: String
+
+    constructor(tableName: String, structure: List<TableHeader>) {
+        this.structure = structure
+
+        val sb = StringBuilder()
+        sb.append("CREATE TABLE [$tableName] (")
+        structure.forEach {
+            sb.append("[${it.name}] ${it.type} ")
+            if (it.notnull == 1) sb.append(" NOT NULL ")
+            if (it.pk == 1) sb.append(" PRIMARY KEY AUTOINCREMENT ")
+            if (it.dflt_value != null) sb.append(" DEFAULT '" + it.dflt_value + "'")
+            if (structure.last() != it) sb.append(", \r\n")
+        }
+        sb.append(");")
+
+
+        this.sql = sb.toString()
+    }
 
     constructor(createTableStatement: String) {
         sql = createTableStatement
@@ -17,12 +35,12 @@ class CreateTable {
     """.trimIndent().toRegex()
             val columnMatchResult = columnRegex.find(columnDefinition)
             val (name, type, primaryKey, notNull, defaultValue) = columnMatchResult!!.destructured
-            Column(
+            TableHeader(
                 cid = cid++,
                 name = name,
                 type = type,
                 pk = if (primaryKey.isEmpty()) 0 else 1,
-                notnull = notNull.isNotEmpty(),
+                notnull = if (notNull.isNotEmpty()) 1 else 0,
                 dflt_value = defaultValue.ifEmpty { null }
             )
         }
@@ -63,12 +81,5 @@ class CreateTable {
         return r
     }
 
-    data class Column(
-        val cid: Int,
-        val name: String,
-        val type: String,
-        val pk: Int,
-        val notnull: Boolean,
-        val dflt_value: String?
-    )
+
 }

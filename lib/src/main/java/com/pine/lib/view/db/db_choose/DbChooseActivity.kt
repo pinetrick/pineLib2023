@@ -116,40 +116,4 @@ class DbChooseActivity : PineAppCompatActivity() {
 
     }
 
-    fun addFakeData() {
-        val db = Db("TestDb2")
-        val table = db.model("Users1")
-        table.create {
-            it.apply {
-                add(TableHeader("id", "INTEGER", pk = 1))
-                add(TableHeader("colume1", "TEXT"))
-                add(TableHeader("colume2", "TEXT"))
-                add(TableHeader("colume3", "TEXT"))
-                add(TableHeader("colume4", "TEXT"))
-                add(TableHeader("colume5", "TEXT"))
-                add(TableHeader("colume6", "TEXT"))
-                add(TableHeader("colume7", "TEXT"))
-                add(TableHeader("colume8", "TEXT"))
-                add(TableHeader("colume9", "TEXT"))
-            }
-        }
-
-        var record = table.newRecord()
-            .set("colume1", "Unknown Value")
-            .set("colume2", "Unknown Value")
-            .set("colume3", "Unknown Value")
-            .set("colume4", null)
-            .set("colume5", "Unknown Value")
-            .set("colume6", "Unknown Value")
-            .set("colume7", "Unknown Value")
-            .set("colume8", "Unknown Value")
-            .set("colume9", "Unknown Value")
-            .save()
-
-        record = table.select().records[0]
-        record.set("colume1", "xx")
-        record.save()
-
-        sqlEditor.setText(db.lastSql)
-    }
 }
