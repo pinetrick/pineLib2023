@@ -13,8 +13,8 @@
                             <h3 class="card-title">{{db.dbName}}</h3>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
+                                <button type="button" class="btn btn-tool" ng-click="vm.dbCreateTable(db.dbName)">
+                                    <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
@@ -26,6 +26,9 @@
                                     </a>
                                     <a href="#" ng-click="vm.dbTabelStructure(db.dbName, table)" class="nav-link">
                                         <i class="fa-solid fa-wrench" ></i>
+                                    </a>
+                                    <a href="#" ng-click="vm.dbDeleteTable(db.dbName, table)" class="nav-link">
+                                        <i class="fa-solid fa-trash" ></i>
                                     </a>
                                 </li>
                             </ul>
@@ -42,7 +45,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-11">
-                                    <textarea class="form-control" ng-model="vm.tableData.sql"></textarea>
+                                    <textarea class="form-control" ng-model="vm.tableData.sql" ></textarea>
                                 </div>
 
                                 <div class="col-md-1">

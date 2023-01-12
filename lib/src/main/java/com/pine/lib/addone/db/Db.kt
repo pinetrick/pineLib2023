@@ -144,6 +144,11 @@ class Db(var dbName: String) {
         libDb?.recordSql(dbName, _sql)
     }
 
+    fun deleteTable(tableName: String) {
+        val sql = "DROP TABLE [$tableName]"
+        useDb { it.execSQL(sql) }
+    }
+
     companion object {
         private val dbs: HashMap<String, Db> = HashMap()
 

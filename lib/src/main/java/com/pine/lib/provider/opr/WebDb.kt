@@ -22,6 +22,11 @@ class WebDb : BaseOpr() {
 
     }
 
+    fun deleteTable() {
+        responseData.returnObj = Db(requestData.urls[2]).deleteTable(requestData.urls[3])
+
+    }
+
     fun select() {
         responseData.returnObj =
             Db(requestData.urls[2]).model(requestData.urls[3]).limit(100).run {

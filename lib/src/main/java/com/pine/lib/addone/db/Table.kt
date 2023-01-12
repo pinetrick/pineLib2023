@@ -102,7 +102,7 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
             sb.append("[" + it.name + "] ")
             sb.append(it.type + " ")
             if (it.pk == 1) {
-                sb.append(" PRIMARY KEY ")
+                sb.append(" PRIMARY KEY AUTOINCREMENT ")
             }
             if (list.last() != it) sb.append(", ")
         }
@@ -236,4 +236,5 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         //重命名表
         db.execSQL("ALTER TABLE [$tmpTableName] RENAME TO [$tableName]")
     }
+
 }

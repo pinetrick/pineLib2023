@@ -13,7 +13,7 @@ class CreateTable {
             sb.append("[${it.name}] ${it.type} ")
             if (it.notnull == 1) sb.append(" NOT NULL ")
             if (it.pk == 1) sb.append(" PRIMARY KEY AUTOINCREMENT ")
-            if (it.dflt_value != null) {
+            if (it.dflt_value != null && it.dflt_value != "") {
                 val def = it.dflt_value.toString()
                 if (def.startsWith("'") && def.endsWith("'")) {
                     val newdef = def.substring(1, def.length - 1)
