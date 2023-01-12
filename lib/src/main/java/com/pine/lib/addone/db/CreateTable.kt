@@ -13,7 +13,17 @@ class CreateTable {
             sb.append("[${it.name}] ${it.type} ")
             if (it.notnull == 1) sb.append(" NOT NULL ")
             if (it.pk == 1) sb.append(" PRIMARY KEY AUTOINCREMENT ")
-            if (it.dflt_value != null) sb.append(" DEFAULT '" + it.dflt_value + "'")
+            if (it.dflt_value != null) {
+                val def = it.dflt_value.toString()
+                if (def.startsWith("'") && def.endsWith("'")) {
+                    val newdef = def.substring(1, def.length - 1)
+                    it.dflt_value = newdef
+                }
+
+                sb.append(" DEFAULT ")
+                if (it.type.lowercase() == "text") sb.append("'" + it.dflt_value + "'")
+                else sb.append(it.dflt_value)
+            }
             if (structure.last() != it) sb.append(", \r\n")
         }
         sb.append(");")

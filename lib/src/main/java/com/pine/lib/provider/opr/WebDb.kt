@@ -30,10 +30,17 @@ class WebDb : BaseOpr() {
     }
 
     fun structure() {
-        val tableStructure = Db(requestData.urls[2])
-            .recordsFromRawQuery("pragma table_info ('${requestData.urls[3]}');")
+        val db = requestData.urls[2]
+        val table = requestData.urls[3]
 
-        tableStructure.tableName = "[STRUCTURE]" + requestData.urls[3]
+        return getStructure(db, table)
+    }
+
+    private fun getStructure(db: String, table: String){
+        val tableStructure = Db(db)
+            .recordsFromRawQuery("pragma table_info ([${table}]);")
+
+        tableStructure.tableName = "[STRUCTURE]$table"
         tableStructure.headers[0].pk = 1
         tableStructure.records.map {
             it.pk = "cid"
@@ -63,7 +70,7 @@ class WebDb : BaseOpr() {
         if (key == "cid") return error("You Cannot Change CID")
 
         val oldStructure = Db(requestData.urls[2])
-            .recordsFromRawQuery("pragma table_info ('$table')")
+            .recordsFromRawQuery("pragma table_info ([$table])")
 
 
         val oldKey = oldStructure.records.find {
@@ -88,6 +95,24 @@ class WebDb : BaseOpr() {
 
     }
 
+    fun delete(){
+        val db = requestData.urls[2]
+        var table = requestData.urls[3]
+        val isStructureChange = table.startsWith("[STRUCTURE]")
+        if (isStructureChange) table = table.substring(11)
+        val pks = requestData.bodyArgs["pk"]!!.split(",")
+
+        if (!isStructureChange) {
+            pks.forEach {
+                Db(db).model(table).find(it)?.delete()
+            }
+            return success()
+        }
+
+        Db(db).model(table).deleteColumn(pks)
+        return success()
+    }
+
     fun newRecord(){
         val db = requestData.urls[2]
         var table = requestData.urls[3]
@@ -110,7 +135,7 @@ class WebDb : BaseOpr() {
 
         val cid = requestData.bodyArgs["0"]?.toInt() ?: -1
         val name = requestData.bodyArgs["1"]!!
-        val type = requestData.bodyArgs["2"]!!
+        val type = requestData.bodyArgs["2"] ?: "TEXT"
         val notnull = requestData.bodyArgs["3"]?.toInt() ?: 0
         val dflt_value = requestData.bodyArgs["4"] ?: null
         val pk = requestData.bodyArgs["5"]?.toInt() ?: 0
@@ -127,6 +152,12 @@ class WebDb : BaseOpr() {
 
     fun query() {
         val sql = URLDecoder.decode(requestData.urls[3], "UTF-8")
+        if (sql.trim().lowercase().startsWith("pragma table_info")) {
+            val db = requestData.urls[2]
+            val table = Db(db).getSingleTableName(sql)
+            return getStructure(db, table!!)
+        }
+
         responseData.returnObj = Db(requestData.urls[2]).recordsFromRawQuery(sql)
     }
 

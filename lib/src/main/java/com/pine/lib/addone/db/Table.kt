@@ -15,7 +15,7 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
     private var where: ArrayList<String>? = null
 
     val headers: ArrayList<TableHeader> by lazy {
-        val records: Records = db.recordsFromRawQuery("pragma table_info ('$tableName');")
+        val records: Records = db.recordsFromRawQuery("pragma table_info ([$tableName]);")
 
         val r: ArrayList<TableHeader> = ArrayList()
 
@@ -192,6 +192,40 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         headers.forEach {
             sb.append(it.name)
             if (headers.last() != it) sb.append(", ")
+        }
+        sb.append(" FROM [$tableName]")
+        db.execSQL(sb.toString())
+
+        //删除原始表
+        db.execSQL("DROP TABLE [$tableName]")
+
+        //重命名表
+        db.execSQL("ALTER TABLE [$tmpTableName] RENAME TO [$tableName]")
+    }
+
+    fun deleteColumn(pks: List<String>) {
+        val header = headers.clone() as ArrayList<TableHeader>
+
+        val removeArray = ArrayList<TableHeader>()
+
+        pks.forEach {
+            removeArray.add(header[it.toInt()])
+        }
+        removeArray.forEach {
+            header.remove(it)
+        }
+
+        //创建临时表
+        val tmpTableName = tableName!! + "-" + Random().nextInt(999999).toString()
+        var sql = CreateTable(tmpTableName, header).sql
+        db.execSQL(sql)
+
+        //拷贝数据
+        val sb = StringBuilder()
+        sb.append("INSERT INTO [$tmpTableName] SELECT ")
+        header.forEach {
+            sb.append(it.name)
+            if (header.last() != it) sb.append(", ")
         }
         sb.append(" FROM [$tableName]")
         db.execSQL(sb.toString())

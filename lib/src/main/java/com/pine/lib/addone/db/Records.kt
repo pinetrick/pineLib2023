@@ -51,7 +51,7 @@ data class Records(
                 "short" -> c.getShortOrNull(index)
                 "long" -> c.getLongOrNull(index)
                 "text" -> c.getStringOrNull(index)
-                "null" -> null
+                "null" -> c.getStringOrNull(index)
                 else -> {
                     e("Unknown Type ${it.type}")
                     "Unknown"

@@ -12,7 +12,7 @@ class Db(var dbName: String) {
     var lastSql: String = ""
     private val tablesMap: HashMap<String, Table> = HashMap()
 
-    private fun<T> useDb(dbCalls: (SQLiteDatabase) -> T): T{
+    private fun <T> useDb(dbCalls: (SQLiteDatabase) -> T): T {
         val db = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
         db.use { db ->
             return dbCalls(db)
@@ -52,7 +52,7 @@ class Db(var dbName: String) {
     }
 
     fun recordsFromRawQuery(sql: String, selectionArgs: Array<String>? = null): Records {
-        return useDb { db->
+        return useDb { db ->
             val records = Records()
             val c = db.rawQuery(sql, selectionArgs)
             logSql(sql, selectionArgs as Array<Any?>?)
@@ -70,8 +70,7 @@ class Db(var dbName: String) {
                         records.anylizeLine(c, pk)
                         c.moveToNext()
                     }
-                }
-                else {
+                } else {
                     //No record, init header
                     records.dbName = dbName
                     records.tableName = singleTableName
@@ -86,15 +85,22 @@ class Db(var dbName: String) {
 
     fun getSingleTableName(sql: String): String? {
         // 使用正则表达式匹配出表名
-        val pattern = "(?i)FROM\\s+(\\[?\\S+\\]?)".toRegex()
-        val matchResult = pattern.find(sql)
-        return if (matchResult != null) {
+        var pattern = "(?i)FROM\\s+(\\[?\\S+\\]?)".toRegex()
+        var matchResult = pattern.find(sql)
+        if (matchResult != null) {
             // 如果匹配到了，返回表名
-            matchResult.groupValues[1].replace("[", "").replace("]", "")
-        } else {
-            // 否则返回 null
-            null
+            return matchResult.groupValues[1].replace("[", "").replace("]", "")
         }
+
+        pattern = "(?i)pragma table_info\\s+\\((\\[?\\S+\\]?)\\)".toRegex()
+        matchResult = pattern.find(sql)
+        if (matchResult != null) {
+            // 如果匹配到了，返回表名
+            return matchResult.groupValues[1].replace("[", "").replace("]", "")
+        }
+
+        return null
+
     }
 
     fun getPrimaryKey(sql: String): String? {
@@ -126,7 +132,7 @@ class Db(var dbName: String) {
 
     fun execSQL(sql: String, bindArgs: Array<Any?> = emptyArray()) {
         logSql(sql, bindArgs)
-        return useDb{ it.execSQL(sql, bindArgs) }
+        return useDb { it.execSQL(sql, bindArgs) }
     }
 
     private fun logSql(sql: String, bindArgs: Array<Any?>? = null) {
