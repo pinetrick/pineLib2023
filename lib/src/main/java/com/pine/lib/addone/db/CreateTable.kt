@@ -16,8 +16,7 @@ class CreateTable {
             if (it.dflt_value != null && it.dflt_value != "") {
                 val def = it.dflt_value.toString()
                 if (def.startsWith("'") && def.endsWith("'")) {
-                    val newdef = def.substring(1, def.length - 1)
-                    it.dflt_value = newdef
+                    it.dflt_value = def.substring(1, def.length - 1)
                 }
 
                 sb.append(" DEFAULT ")
