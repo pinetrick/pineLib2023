@@ -65,32 +65,59 @@ class WebDb : BaseOpr() {
         val oldStructure = Db(requestData.urls[2])
             .recordsFromRawQuery("pragma table_info ('$table')")
 
-        if (key == "name") {
-            val oldKey = oldStructure.records.find {
-                it["cid"].toString() == pkValue
-            }!!
-            val cid = oldKey["cid"] as Int
-            val name = oldKey["name"]
-            val type = oldKey["type"] as String
-            val notnull = oldKey["notnull"] == 1
-            val dflt_value = if (oldKey["dflt_value"] != null) "DEFAULT ${oldKey["dflt_value"]}" else ""
-            val pk = oldKey["pk"]
+
+        val oldKey = oldStructure.records.find {
+            it["cid"].toString() == pkValue
+        }!! //type
+        val cid = oldKey["cid"] as Int
+        var name = oldKey["name"] as String
+        var type = oldKey["type"] as String
+        var notnull = oldKey["notnull"] == 1
+        var dflt_value = if (oldKey["dflt_value"] != null) "DEFAULT ${oldKey["dflt_value"]}" else ""
+        var pk = oldKey["pk"] == 1
+
+        if (key == "name") name = newValue
+        if (key == "type") type = newValue
+        if (key == "notnull") notnull = newValue == "1"
+        if (key == "dflt_value") dflt_value = newValue
+        if (key == "pk") pk = newValue == "1"
+
+        Db(db).model(table).alterColumn(cid, name, type, notnull, dflt_value, pk)
+
+        return success()
+
+    }
+
+    fun newRecord(){
+        val db = requestData.urls[2]
+        var table = requestData.urls[3]
+        val isStructureChange = table.startsWith("[STRUCTURE]")
+        if (isStructureChange) table = table.substring(11)
+
+        if (!isStructureChange) {
+            val record = Db(db).model(table).newRecord()
+            val headers = Db(db).model(table).headers
+
+            headers.forEach{
+                val index = headers.indexOf(it)
+                record[it.name] = requestData.bodyArgs[index.toString()] ?: it.dflt_value
+            }
+            record.save()
 
 
-
-            //var sql = "ALTER TABLE [$table] ADD COLUMN [$newValue] $type $notnull $dflt_value;"
-            Db(db).model(table).alterColumn(cid, newValue, type, notnull, dflt_value)
-//
-//            sql = "UPDATE [$table] SET [$newValue] = [$name]"
-//            Db(db).execSQL(sql)
-//
-//            sql = "ALTER TABLE [$table] DROP COLUMN [$name]"
-//            Db(db).execSQL(sql)
-
-            responseData.returnObj = "Success"
+            return success()
         }
 
+        val cid = requestData.bodyArgs["0"]?.toInt() ?: -1
+        val name = requestData.bodyArgs["1"]!!
+        val type = requestData.bodyArgs["2"]!!
+        val notnull = requestData.bodyArgs["3"]?.toInt() ?: 0
+        val dflt_value = requestData.bodyArgs["4"] ?: null
+        val pk = requestData.bodyArgs["5"]?.toInt() ?: 0
 
+        Db(db).model(table).addColumn(name, type, cid, notnull == 1, dflt_value)
+
+        return success()
     }
 
     fun exec() {

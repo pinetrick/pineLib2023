@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.pine.lib.app.c
+import com.pine.lib.debug.e
 import com.pine.lib.debug.libDb
 
 
@@ -70,7 +71,15 @@ class Db(var dbName: String) {
                         c.moveToNext()
                     }
                 }
+                else {
+                    //No record, init header
+                    records.dbName = dbName
+                    records.tableName = singleTableName
+                    records.headers = model(singleTableName!!).headers
+
+                }
             }
+
             records
         }
     }

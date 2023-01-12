@@ -46,7 +46,7 @@
                                 </div>
 
                                 <div class="col-md-1">
-                                    <div class="btn btn-primary" ng-click="vm.dbRawQuery(vm.choosedDbName ,vm.tableData.sql)">
+                                    <div class="btn btn-primary" ng-click="vm.dbOnRefreshBtnClick()">
                                         <i class="fas fa-search"></i>
                                     </div>
                                 </div>
@@ -56,9 +56,6 @@
                         <div class="card-body p-0">
 
                             <div class="mailbox-controls">
-                                <!-- Check all button -->
-                                <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
-                                </button>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-sm">
                                         <i class="far fa-trash-alt"></i>
@@ -93,18 +90,38 @@
                                 <table class="table table-hover table-striped">
                                     <tbody>
 
-                                    <tr>
-                                        <td ng-repeat="header in vm.tableData.headers" class="pl-0">
-                                            {{header.name}}
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td class="" style="width: 5px">
+                                                <input type="checkbox" ng-model="vm.dbAllRecordChosen"
+                                                       ng-change="vm.dbChooseAll(vm.dbAllRecordChosen)"
+                                                />
+                                            </td>
+                                            <td ng-repeat="header in vm.tableData.headers" class="pl-0">
+                                                {{header.name}}
+                                            </td>
+                                        </tr>
 
-                                    <tr ng-repeat="(index, record) in vm.tableData.records">
-                                        <td ng-repeat="(key, value) in record.values" class="py-0 px-1 dbColumnLenghtLimit">
-                                            <div ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</div>
-                                            <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
-                                                   ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
-                                    </tr>
+                                        <tr ng-repeat="(index, record) in vm.tableData.records">
+                                            <td class="py-0">
+                                                <input type="checkbox" ng-model="record.isChosen" />
+                                            </td>
+                                            <td ng-repeat="(key, value) in record.values" class="py-0 px-1 dbColumnLenghtLimit">
+                                                <div ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</div>
+                                                <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
+                                                       ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
+                                        </tr>
+
+                                        <!--New Records-->
+                                        <tr>
+                                            <td class="py-0">
+                                                <span ng-click="vm.dbSaveNewRecord()">
+                                                    <i class="fa-solid fa-floppy-disk"></i>
+                                                </span>
+                                            </td>
+                                            <td ng-repeat="(key,header) in vm.tableData.headers" class="py-0 px-1 dbColumnLenghtLimit">
+                                                <input type="text" ng-model="vm.dbNewRecord[key]" class="sql_input">
+                                            </td>
+                                        </tr>
 
                                     </tbody>
                                 </table>
