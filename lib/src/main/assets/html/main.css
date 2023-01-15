@@ -27,6 +27,9 @@
     width: 100%;
     border: 0px;
 }
+.nullText{
+    color: gray;
+}
 .font-size-1rem{  font-size: 1rem;}
 .font-size-09rem{  font-size: 0.9rem;}
 
