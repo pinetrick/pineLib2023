@@ -85,7 +85,7 @@ class WebDb : BaseOpr() {
         var name = oldKey["name"] as String
         var type = oldKey["type"] as String
         var notnull = oldKey["notnull"] == 1
-        var dflt_value = if (oldKey["dflt_value"] != null) "DEFAULT ${oldKey["dflt_value"]}" else ""
+        var dflt_value = if (oldKey["dflt_value"] != null) (oldKey["dflt_value"] as String) else ""
         var pk = oldKey["pk"] == 1
 
         if (key == "name") name = newValue
