@@ -1,5 +1,8 @@
 package com.pine.lib.addone.db
 
+import java.util.*
+import kotlin.collections.ArrayList
+
 class Table constructor(val dbName: String, val tableName: String? = null) {
     private val db: Db = Db.getDb(dbName)
 
@@ -12,9 +15,9 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
     private var where: ArrayList<String>? = null
 
     val headers: ArrayList<TableHeader> by lazy {
-        val records: Records = db.recordsFromRawQuery("pragma table_info ('$tableName');")
+        val records: Records = db.recordsFromRawQuery("pragma table_info ([$tableName]);")
 
-        val r: ArrayList<TableHeader> = ArrayList<TableHeader>()
+        val r: ArrayList<TableHeader> = ArrayList()
 
         records.records.forEach { c ->
             val tableHeader = TableHeader()
@@ -45,7 +48,7 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         return this
     }
 
-    fun where(key: String, value: String): Table {
+    fun where(key: String, value: Any?): Table {
         return where("[$key] = '$value'")
     }
 
@@ -77,7 +80,10 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         return db.recordsFromRawQuery(sb.toString())
     }
 
-    fun find(): Record? {
+    fun find(pkValue: Any? = null): Record? {
+        if (pkValue != null) {
+            where(pk!!, pkValue)
+        }
         val results = limit(1).select()
         if (results.records.size == 0) return null
 
@@ -96,7 +102,7 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
             sb.append("[" + it.name + "] ")
             sb.append(it.type + " ")
             if (it.pk == 1) {
-                sb.append(" PRIMARY KEY ")
+                sb.append(" PRIMARY KEY AUTOINCREMENT ")
             }
             if (list.last() != it) sb.append(", ")
         }
@@ -106,4 +112,129 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         db.execSQL(sb.toString())
 
     }
+
+
+    fun addColumn(
+        name: String,
+        type: String,
+        location: Int = -1,
+        notNull: Boolean = false,
+        defValue: String? = null,
+        isPk: Boolean = false
+    ) {
+        val header = headers.clone() as ArrayList<TableHeader>
+        val _location = if (location == -1) header.size else location
+
+        val tableHeader = TableHeader()
+        tableHeader.cid = location
+        tableHeader.name = name
+        tableHeader.type = type
+        tableHeader.notnull = if (notNull) 1 else 0
+        tableHeader.dflt_value = defValue
+        tableHeader.pk = if (isPk) 1 else 0
+        header.add(_location, tableHeader)
+
+        //创建临时表
+        val tmpTableName = tableName!! + "-" + Random().nextInt(999999).toString()
+        var sql = CreateTable(tmpTableName, header).sql
+        db.execSQL(sql)
+
+        //拷贝数据
+        val sb = StringBuilder()
+        sb.append("INSERT INTO [$tmpTableName] SELECT ")
+        header.forEach {
+            if (it.name == name) {
+                sb.append("'$defValue'")
+            } else {
+                sb.append(it.name)
+            }
+            if (header.last() != it) sb.append(", ")
+        }
+        sb.append(" FROM [$tableName]")
+        db.execSQL(sb.toString())
+
+        //删除原始表
+        db.execSQL("DROP TABLE [$tableName]")
+
+        //重命名表
+        db.execSQL("ALTER TABLE [$tmpTableName] RENAME TO [$tableName]")
+    }
+
+    fun alterColumn(
+        location: Int,
+        name: String? = null,
+        type: String? = null,
+        notNull: Boolean = false,
+        defValue: String? = null,
+        isPk: Boolean = false
+    ) {
+        val header = headers.clone() as ArrayList<TableHeader>
+        val oldValue = header[location]
+
+        val tableHeader = TableHeader()
+        tableHeader.cid = location
+        tableHeader.name = name ?: oldValue.name
+        tableHeader.type = type ?: oldValue.type
+        tableHeader.notnull = if (notNull) 1 else 0
+        tableHeader.dflt_value = defValue
+        tableHeader.pk = if (isPk) 1 else 0
+
+        header[location] = tableHeader
+
+        //创建临时表
+        val tmpTableName = tableName!! + "-" + Random().nextInt(999999).toString()
+        var sql = CreateTable(tmpTableName, header).sql
+        db.execSQL(sql)
+
+        //拷贝数据
+        val sb = StringBuilder()
+        sb.append("INSERT INTO [$tmpTableName] SELECT ")
+        headers.forEach {
+            sb.append(it.name)
+            if (headers.last() != it) sb.append(", ")
+        }
+        sb.append(" FROM [$tableName]")
+        db.execSQL(sb.toString())
+
+        //删除原始表
+        db.execSQL("DROP TABLE [$tableName]")
+
+        //重命名表
+        db.execSQL("ALTER TABLE [$tmpTableName] RENAME TO [$tableName]")
+    }
+
+    fun deleteColumn(pks: List<String>) {
+        val header = headers.clone() as ArrayList<TableHeader>
+
+        val removeArray = ArrayList<TableHeader>()
+
+        pks.forEach {
+            removeArray.add(header[it.toInt()])
+        }
+        removeArray.forEach {
+            header.remove(it)
+        }
+
+        //创建临时表
+        val tmpTableName = tableName!! + "-" + Random().nextInt(999999).toString()
+        var sql = CreateTable(tmpTableName, header).sql
+        db.execSQL(sql)
+
+        //拷贝数据
+        val sb = StringBuilder()
+        sb.append("INSERT INTO [$tmpTableName] SELECT ")
+        header.forEach {
+            sb.append(it.name)
+            if (header.last() != it) sb.append(", ")
+        }
+        sb.append(" FROM [$tableName]")
+        db.execSQL(sb.toString())
+
+        //删除原始表
+        db.execSQL("DROP TABLE [$tableName]")
+
+        //重命名表
+        db.execSQL("ALTER TABLE [$tmpTableName] RENAME TO [$tableName]")
+    }
+
 }

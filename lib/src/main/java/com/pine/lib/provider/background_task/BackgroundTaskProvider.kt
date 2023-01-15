@@ -5,13 +5,17 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import com.pine.lib.BuildConfig
 import com.pine.lib.app.StaticPineApplication
 import com.pine.lib.provider.server_socket.ClientServer
 
 class BackgroundTaskProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         StaticPineApplication.onCreate(context as Application)
-        ClientServer(8080).start()
+        if (BuildConfig.DEBUG) {
+            ClientServer(8080).start()
+        }
+
         return true
     }
 

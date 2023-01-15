@@ -19,4 +19,12 @@ open class BaseOpr {
             responseData.content = e.stackTraceToString().replace("\r\n", "<br>")
         }
     }
+
+    fun success(info: String = "Success") {
+        responseData.returnObj = info
+    }
+
+    fun error(info: String = "Error") {
+        responseData.returnObj = info
+    }
 }

@@ -25,6 +25,15 @@ class Record constructor(val dbName: String, val tableName: String?) {
         return this
     }
 
+    fun delete(): Record{
+        val db = Db.getDb(dbName)
+        val table = db.model(tableName!!)
+        val pk = table.headers.firstOrNull { it.pk == 1 }
+
+        db.execSQL("DELETE FROM [${tableName}] WHERE [${pk!!.name}]='${values[pk!!.name]}'")
+        return this
+    }
+
     private fun getUpdateSql(pk: TableHeader): Pair<String, Array<Any?>> {
         val db = Db.getDb(dbName)
         val table = db.model(tableName!!)
