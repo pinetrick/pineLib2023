@@ -60,7 +60,7 @@ class WebDb : BaseOpr() {
         val isStructureChange = table.startsWith("[STRUCTURE]")
         if (isStructureChange) table = table.substring(11)
         val key = requestData.bodyArgs["key"]
-        val newValue = requestData.bodyArgs["newValue"]!!
+        val newValue = requestData.bodyArgs["newValue"]
         val pkValue = requestData.bodyArgs["pkValue"]
 
         if (!isStructureChange) {
@@ -85,11 +85,11 @@ class WebDb : BaseOpr() {
         var name = oldKey["name"] as String
         var type = oldKey["type"] as String
         var notnull = oldKey["notnull"] == 1
-        var dflt_value = if (oldKey["dflt_value"] != null) (oldKey["dflt_value"] as String) else ""
+        var dflt_value = oldKey["dflt_value"] as String?
         var pk = oldKey["pk"] == 1
 
-        if (key == "name") name = newValue
-        if (key == "type") type = newValue
+        if (key == "name") name = newValue!!
+        if (key == "type") type = newValue!!
         if (key == "notnull") notnull = newValue == "1"
         if (key == "dflt_value") dflt_value = newValue
         if (key == "pk") pk = newValue == "1"

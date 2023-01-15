@@ -100,7 +100,10 @@
                                                 <input type="checkbox" ng-model="record.isChosen" />
                                             </td>
                                             <td ng-repeat="(key, value) in record.values" class="py-0 px-1 dbColumnLenghtLimit">
-                                                <div ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">{{value}}</div>
+                                                <div ng-dblClick="vm.dbEditing=index+key" ng-show="vm.dbEditing!=index+key">
+                                                    {{value}}
+                                                    <span ng-show="value===null" class="nullText">null</span>
+                                                </div>
                                                 <input ng-show="vm.dbEditing==index+key" type="text" ng-model="value" class="sql_input"
                                                        ng-blur="vm.dbOnDataChange(vm.tableData.dbName, vm.tableData.tableName, key, value, record)">
                                         </tr>
