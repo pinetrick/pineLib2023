@@ -12,9 +12,7 @@ import com.pine.lib.provider.server_socket.ClientServer
 class BackgroundTaskProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         StaticPineApplication.onCreate(context as Application)
-        if (BuildConfig.DEBUG) {
-            ClientServer(8080).start()
-        }
+        ClientServer(8080).start()
 
         return true
     }
