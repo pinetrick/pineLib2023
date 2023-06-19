@@ -47,7 +47,7 @@ data class Records(
                 "float" -> c.getFloatOrNull(index)
                 "real" -> c.getFloatOrNull(index)
                 "double" -> c.getDoubleOrNull(index)
-                "integer" -> c.getIntOrNull(index)
+                "integer" -> c.getLongOrNull(index)
                 "short" -> c.getShortOrNull(index)
                 "long" -> c.getLongOrNull(index)
                 "text" -> c.getStringOrNull(index)
