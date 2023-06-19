@@ -10,6 +10,11 @@ open class PineActivity : Activity() {
         super.onResume()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        StaticPineActivity.onRestart(this)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         StaticPineActivity.onKeyDown(this, keyCode, event)
         return super.onKeyDown(keyCode, event)

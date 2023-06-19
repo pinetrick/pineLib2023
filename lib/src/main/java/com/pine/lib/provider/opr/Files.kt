@@ -69,6 +69,7 @@ class Files : BaseOpr() {
 
         val content = requestData.bodyArgs["content"]
 
+        File(File(file).parent).mkdirs()
         content?.let { File(file).writeText(it) }
 
 
