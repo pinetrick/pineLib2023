@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 
-open class PineComponentActivity: ComponentActivity() {
+open class PineComponentActivity : ComponentActivity() {
     override fun onResume() {
         StaticPineActivity.onResume(this)
         super.onResume()
+    }
+
+    override fun onRestart() {
+        StaticPineActivity.onRestart(this)
+        super.onRestart()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
