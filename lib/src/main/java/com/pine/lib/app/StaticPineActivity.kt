@@ -58,7 +58,7 @@ object StaticPineActivity {
         }
     }
 
-    fun onRestart(pineActivity: PineActivity) {
+    fun onRestart(pineActivity: Activity) {
         if (!enableRestart) {
             pineActivity.finish()
         }
