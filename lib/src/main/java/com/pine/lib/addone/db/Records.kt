@@ -47,9 +47,9 @@ data class Records(
                 "float" -> c.getFloatOrNull(index)
                 "real" -> c.getFloatOrNull(index)
                 "double" -> c.getDoubleOrNull(index)
-                "integer" -> c.getLongOrNull(index)
+                "integer" -> c.getIntOrLong(index)
                 "short" -> c.getShortOrNull(index)
-                "long" -> c.getLongOrNull(index)
+                "long" -> c.getIntOrLong(index)
                 "text" -> c.getStringOrNull(index)
                 "null" -> c.getStringOrNull(index)
                 else -> {
@@ -63,4 +63,14 @@ data class Records(
         records.add(record)
     }
 
+
+
 }
+
+fun Cursor.getIntOrLong(index: Int): Any? {
+    val intVal: Int? = this.getIntOrNull(index)
+    val longVal: Long? = this.getLongOrNull(index)
+    if (intVal == null) return null
+    return if (intVal.toLong() == longVal) intVal else longVal
+}
+
