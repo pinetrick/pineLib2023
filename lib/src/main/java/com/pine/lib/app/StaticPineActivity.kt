@@ -14,6 +14,9 @@ object StaticPineActivity {
     //是否开启双击退出
     var enableDoubleReturnExit = false
     lateinit var activity: WeakReference<Activity>
+    //防止应用重启
+    var enableRestart = true
+
 
     fun onCreate(activity: Activity) {
         StaticPineActivity.activity = WeakReference(activity)
@@ -52,6 +55,12 @@ object StaticPineActivity {
             }
             else -> {
             }
+        }
+    }
+
+    fun onRestart(pineActivity: PineActivity) {
+        if (!enableRestart) {
+            pineActivity.finish()
         }
     }
 

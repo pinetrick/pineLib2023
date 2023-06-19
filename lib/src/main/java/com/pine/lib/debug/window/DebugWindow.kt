@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.GridView
 import com.pine.lib.R
 import com.pine.lib.addone.DataCleanManager
+import com.pine.lib.app.StaticPineActivity
 import com.pine.lib.app.a
 import com.pine.lib.app.c
 import com.pine.lib.app.intent
@@ -91,6 +92,7 @@ class DebugWindow : OnItemClickListener {
                             .parse("package:" + c().packageName)
                         a().startActivity(intent)
                     } else if (id == 3) {
+                        StaticPineActivity.enableRestart = false
                         exitProcess(0)
                     }
                 }.show("应用将退出！", "清除数据", "卸载应用", "自杀", "取消")
