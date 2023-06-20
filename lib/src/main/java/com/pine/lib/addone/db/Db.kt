@@ -4,13 +4,11 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.pine.lib.app.c
-import com.pine.lib.debug.e
 import com.pine.lib.debug.libDb
 
 
 class Db(var dbName: String) {
     var lastSql: String = ""
-    private val tablesMap: HashMap<String, Table> = HashMap()
 
     private fun <T> useDb(dbCalls: (SQLiteDatabase) -> T): T {
         val db = c().openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null)
@@ -20,10 +18,7 @@ class Db(var dbName: String) {
     }
 
     fun model(tableName: String): Table {
-        if (tablesMap[tableName] == null) {
-            tablesMap[tableName] = Table(dbName, tableName)
-        }
-        return tablesMap[tableName]!!
+        return Table(dbName, tableName)
     }
 
     fun tables(): List<String> {

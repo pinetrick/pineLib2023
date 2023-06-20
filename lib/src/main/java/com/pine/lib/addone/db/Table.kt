@@ -1,9 +1,8 @@
 package com.pine.lib.addone.db
 
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Random
 
-class Table constructor(val dbName: String, val tableName: String? = null) {
+class Table constructor(val dbName: String, val tableName: String) {
     private val db: Db = Db.getDb(dbName)
 
     val pk: String? by lazy {
@@ -14,25 +13,8 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
     private var limit: String? = null
     private var where: ArrayList<String>? = null
 
-    val headers: ArrayList<TableHeader> by lazy {
-        val records: Records = db.recordsFromRawQuery("pragma table_info ([$tableName]);")
-
-        val r: ArrayList<TableHeader> = ArrayList()
-
-        records.records.forEach { c ->
-            val tableHeader = TableHeader()
-            tableHeader.cid = c.values["cid"] as Int
-            tableHeader.name = c.values["name"] as String
-            tableHeader.type = c.values["type"] as String
-            tableHeader.notnull = c.values["notnull"] as Int
-            tableHeader.dflt_value = c.values["dflt_value"] as String?
-            tableHeader.pk = c.values["pk"] as Int
-
-            r.add(tableHeader)
-        }
-
-        r
-    }
+    val headers: ArrayList<TableHeader>
+        get() = TableInfoStorage.getHeaders(dbName, tableName)
 
     fun newRecord(): Record {
         return Record(dbName, tableName)
@@ -236,5 +218,6 @@ class Table constructor(val dbName: String, val tableName: String? = null) {
         //重命名表
         db.execSQL("ALTER TABLE [$tmpTableName] RENAME TO [$tableName]")
     }
+
 
 }

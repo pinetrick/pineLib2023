@@ -93,6 +93,7 @@ class DebugWindow : OnItemClickListener {
                         a().startActivity(intent)
                     } else if (id == 3) {
                         StaticPineActivity.enableRestart = false
+
                         exitProcess(0)
                     }
                 }.show("应用将退出！", "清除数据", "卸载应用", "自杀", "取消")
