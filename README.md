@@ -9,6 +9,15 @@ allprojects {
         maven { url 'https://jitpack.io' } # Please add this line
     }
 }
+Some project have settings.gradle, please add following instead
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' } # Please add this line
+    }
+}
 
 
 2. Check Module: build.gradle
