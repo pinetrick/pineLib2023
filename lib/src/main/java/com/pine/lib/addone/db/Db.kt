@@ -150,6 +150,8 @@ class Db(var dbName: String) {
         fun getAllDb(): List<String> {
             return c().databaseList().toList().filter {
                 !it.contains("journal")
+                        && !it.contains("-shm")
+                        && !it.contains("-wal")
             }.reversed()
         }
 
